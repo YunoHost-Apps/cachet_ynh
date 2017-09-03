@@ -1,0 +1,158 @@
+#!/bin/bash
+
+
+# TODO : php artisan down & up
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source _common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# LOAD SETTINGS
+#=================================================
+
+app=$YNH_APP_INSTANCE_NAME
+
+domain=$(ynh_app_setting_get $app domain)
+path_url=$(ynh_app_setting_get $app path)
+final_path=$(ynh_app_setting_get $app final_path)
+db_name=$(ynh_app_setting_get $app db_name)
+db_pwd=$(ynh_app_setting_get $app mysqlpwd)
+
+#=================================================
+# BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
+#=================================================
+
+ynh_backup_before_upgrade	# Backup the current version of the app
+ynh_clean_setup () {
+	ynh_restore_upgradebackup	# restore it if the upgrade fails
+}
+ynh_abort_if_errors	# Active trap pour arrêter le script si une erreur est détectée.
+
+#=================================================
+# CHECK THE PATH
+#=================================================
+
+# Normalize the URL path syntax
+path_url=$(ynh_normalize_url_path $path_url)
+
+#=================================================
+# STANDARD UPGRADE STEPS
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+
+ynh_install_app_dependencies "$pkg_dependencies"
+
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+
+# Create a system user
+ynh_system_user_create $app
+
+#=================================================
+# SET MAINTENANCE MODE ON
+#=================================================
+
+exec_artisan "down"
+
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+
+ynh_app_setting_set $app final_path $final_path
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source "$final_path"
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+
+# Create a dedicated nginx config
+ynh_add_nginx_config
+
+#=================================================
+# PHP-FPM CONFIGURATION
+#=================================================
+
+# Create a dedicated php-fpm config
+ynh_add_fpm_config
+
+#=================================================
+# SPECIFIC UPGRADE
+#=================================================
+
+#=================================================
+# CONFIGURE CACHET
+#=================================================
+
+# env_conf="$final_path/.env"
+
+# # Verify the checksum and backup the file if it's different
+# ynh_backup_if_checksum_is_different "$env_conf"
+
+# cp $final_path/.env.example $env_conf
+# ynh_replace_string "APP_URL=http://localhost" "APP_URL=https://$domain$path_url" "$env_conf"  
+# ynh_replace_string "APP_KEY=SomeRandomString" "APP_KEY=$(ynh_string_random 24)" "$env_conf"
+
+# ynh_replace_string "DB_DATABASE=cachet" "DB_DATABASE=$db_name" "$env_conf"
+# ynh_replace_string "DB_USERNAME=homestead" "DB_USERNAME=$db_name" "$env_conf"
+# ynh_replace_string "DB_PASSWORD=secret" "DB_PASSWORD=$db_pwd" "$env_conf"
+
+# ynh_replace_string "MAIL_DRIVER=smtp" "MAIL_DRIVER=sendmail" "$env_conf"
+# ynh_replace_string "MAIL_HOST=mailtrap.io" "MAIL_HOST=" "$env_conf"
+# ynh_replace_string "MAIL_PORT=2525" "MAIL_PORT=25" "$env_conf"
+# ynh_replace_string "MAIL_USERNAME=null" "MAIL_USERNAME=null" "$env_conf"
+# ynh_replace_string "MAIL_PASSWORD=null" "MAIL_PASSWORD=null" "$env_conf"
+# ynh_replace_string "MAIL_ADDRESS=null" "MAIL_ADDRESS=cachet@$domain" "$env_conf"
+# ynh_replace_string "MAIL_NAME=null" "MAIL_NAME=Cachet" "$env_conf"
+
+# # Disable reporting to CachetHQ servers
+# echo "CACHET_BEACON=false" >> "$env_conf"
+
+# ynh_store_file_checksum "$env_conf"
+
+#=================================================
+# UPDATE DEPENDENCIES WITH COMPOSER
+#=================================================
+
+# Check if dependencies need to be updated with composer
+if [[ -f ${final_path}/composer.json ]]; then
+  exec_composer "${final_path}" update --no-dev --prefer-dist
+else
+  init_composer "${final_path}"
+fi
+
+#=================================================
+# UPDATE CACHET CONFIGURATION
+#=================================================
+
+exec_artisan "app:update"
+rm -rf bootstrap/cache/*
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
+
+# Set permissions to app files
+chown -R root: "$final_path"
+chown -R $app: "${final_path}/.env" "${final_path}/storage/" "${final_path}/bootstrap/"
+
+#=================================================
+# SET MAINTENANCE MODE OFF
+#=================================================
+
+exec_artisan "up"
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+
+systemctl reload nginx

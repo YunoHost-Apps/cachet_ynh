@@ -1,0 +1,195 @@
+#!/bin/bash
+
+#=================================================
+# GENERIC START
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
+source ./_common.sh
+source /usr/share/yunohost/helpers
+
+#=================================================
+# MANAGE SCRIPT FAILURE
+#=================================================
+
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
+
+#=================================================
+# RETRIEVE ARGUMENTS FROM THE MANIFEST
+#=================================================
+
+domain=$YNH_APP_ARG_DOMAIN
+path_url="/"
+admin=$YNH_APP_ARG_ADMIN
+admin_password=$YNH_APP_ARG_ADMIN_PASSWORD
+is_public=$YNH_APP_ARG_IS_PUBLIC
+language=$YNH_APP_ARG_LANGUAGE
+
+app=$YNH_APP_INSTANCE_NAME
+
+#=================================================
+# CHECK IF THE APP CAN BE INSTALLED WITH THESE ARGS
+#=================================================
+
+# Normalize the url path syntax
+path_url=$(ynh_normalize_url_path $path_url)
+
+final_path=/var/www/$app
+test ! -e "$final_path" || ynh_die "This path already contains a folder"
+
+# Check web path availability
+ynh_webpath_available $domain $path_url
+# Register (book) web path
+ynh_webpath_register $app $domain $path_url
+
+#=================================================
+# STORE SETTINGS FROM MANIFEST
+#=================================================
+
+ynh_app_setting_set $app domain $domain
+ynh_app_setting_set $app path $path_url
+ynh_app_setting_set $app admin "$admin"
+ynh_app_setting_set $app admin_password "$admin_password"
+ynh_app_setting_set $app is_public "$is_public"
+ynh_app_setting_set $app language "$language"
+
+#=================================================
+# STANDARD MODIFICATIONS
+#=================================================
+# INSTALL DEPENDENCIES
+#=================================================
+
+ynh_install_app_dependencies "$pkg_dependencies"
+
+#=================================================
+# CREATE A MYSQL DATABASE
+#=================================================
+
+db_name=$(ynh_sanitize_dbid $app)
+ynh_app_setting_set $app db_name $db_name
+ynh_mysql_setup_db $db_name $db_name
+
+#=================================================
+# DOWNLOAD, CHECK AND UNPACK SOURCE
+#=================================================
+
+ynh_app_setting_set $app final_path $final_path
+# Download, check integrity, uncompress and patch the source from app.src
+ynh_setup_source "$final_path"
+
+#=================================================
+# NGINX CONFIGURATION
+#=================================================
+
+# Create a dedicated nginx config
+ynh_add_nginx_config
+
+#=================================================
+# CREATE DEDICATED USER
+#=================================================
+
+# Create a system user
+ynh_system_user_create $app
+
+#=================================================
+# PHP-FPM CONFIGURATION
+#=================================================
+
+# Create a dedicated php-fpm config
+ynh_add_fpm_config
+
+#=================================================
+# SPECIFIC SETUP
+#=================================================
+# PRE-CONFIGURE CACHET
+#=================================================
+
+env_conf="$final_path/.env"
+
+cp $final_path/.env.example $env_conf
+ynh_replace_string "APP_URL=http://localhost" "APP_URL=https://$domain$path_url" "$env_conf"  
+ynh_replace_string "APP_KEY=SomeRandomString" "APP_KEY=$(ynh_string_random 24)" "$env_conf"
+
+ynh_replace_string "DB_DATABASE=cachet" "DB_DATABASE=$db_name" "$env_conf"
+ynh_replace_string "DB_USERNAME=homestead" "DB_USERNAME=$db_name" "$env_conf"
+ynh_replace_string "DB_PASSWORD=secret" "DB_PASSWORD=$db_pwd" "$env_conf"
+
+ynh_replace_string "MAIL_DRIVER=smtp" "MAIL_DRIVER=sendmail" "$env_conf"
+ynh_replace_string "MAIL_HOST=mailtrap.io" "MAIL_HOST=" "$env_conf"
+ynh_replace_string "MAIL_PORT=2525" "MAIL_PORT=25" "$env_conf"
+ynh_replace_string "MAIL_USERNAME=null" "MAIL_USERNAME=null" "$env_conf"
+ynh_replace_string "MAIL_PASSWORD=null" "MAIL_PASSWORD=null" "$env_conf"
+ynh_replace_string "MAIL_ADDRESS=null" "MAIL_ADDRESS=cachet@$domain" "$env_conf"
+ynh_replace_string "MAIL_NAME=null" "MAIL_NAME=Cachet" "$env_conf"
+
+# Disable reporting to CachetHQ servers
+echo "CACHET_BEACON=false" >> "$env_conf"
+
+ynh_store_file_checksum "$env_conf"
+
+#=================================================
+# INSTALL AND INITIALIZE COMPOSER
+#=================================================
+
+init_composer "$final_path"
+
+#=================================================
+# FINALIZE CACHET INSTALLATION
+#=================================================
+
+exec_artisan "key:generate"
+exec_artisan "app:install"
+
+#=================================================
+# GENERIC FINALIZATION
+#=================================================
+# SECURE FILES AND DIRECTORIES
+#=================================================
+
+# Set permissions to app files
+chown -R root: "$final_path"
+chown -R $app: "${final_path}/.env" "${final_path}/storage/" "${final_path}/bootstrap/"
+
+#=================================================
+# FINALIZE CACHET CONFIGURATION
+#=================================================
+
+# Populate MySQL database
+sql_conf="../conf/init-mysql.sql"
+ynh_replace_string "__DOMAIN__" "$domain$path_url" "$sql_conf"
+ynh_replace_string "__USER__" "$admin" "$sql_conf"
+ynh_replace_string "__LANGUAGE__" "$language" "$sql_conf"
+
+password_hash="$(cd $final_path ; php artisan tinker -q  --no-ansi   <<< "echo Hash::make('$admin_password');" |head -n 1)"
+password_pash="${password_hash::-1}" # Remove last character
+ynh_replace_string "__PASSWORD_HASH__" "$password_pash" "$sql_conf"
+
+mail="$(ynh_user_get_info $admin mail)"
+ynh_replace_string "__EMAIL__" "$mail" "$sql_conf"
+
+ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" \
+    < "$sql_conf"
+
+# Create production.php to finalize installation
+production_conf="$final_path/bootstrap/cachet/production.php"
+cp ../conf/production.php $production_conf
+ynh_replace_string "__DOMAIN__" "$domain$path_url" "$production_conf"
+ynh_replace_string "__LANGUAGE__" "$language" "$production_conf"   
+chown $app: $final_path/bootstrap/cachet/production.php
+ynh_store_file_checksum "$production_conf"
+
+# Protect URIs if private
+if [ $is_public -eq 0 ];
+then
+  ynh_app_setting_set "$app" protected_uris "/"
+else
+  ynh_app_setting_set "$app" unprotected_uris "/"
+fi
+
+#=================================================
+# RELOAD NGINX
+#=================================================
+
+systemctl reload nginx
