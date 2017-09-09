@@ -1,5 +1,9 @@
 Cachet for YunoHost
 ------------------------
+[![Install Cachet with YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=cachet)
+
+[![Integration level](https://dash.yunohost.org/integration/cachet.svg)](https://ci-apps.yunohost.org/jenkins/job/cachet%20%28Community%29/lastBuild/consoleFull)
+
 This is a [Cachet](https://cachethq.io/) package for YunoHost.
 
 ![](https://github.com/CachetHQ/Assets/raw/master/images/logo/Cachet.png)
@@ -10,10 +14,6 @@ This is a [Cachet](https://cachethq.io/) package for YunoHost.
 
 [Cachet](https://cachethq.io/) is a free, open source status page for your API, service or company. Built with all of the features that you'd expect from a status page, Cachet comes with a powerful API, a metric system, multiple user support, two factor authentication for added security and is easy to get setup. A powerful, self-hosted alternative to StatusPage.io and Status.io.
 
-
-
-[![Install Cachet with 
-YunoHost](https://install-app.yunohost.org/install-with-yunohost.png)](https://install-app.yunohost.org/?app=cachet)
 
 ![](https://github.com/CachetHQ/Assets/raw/master/screenshots/main-interface.png)
 

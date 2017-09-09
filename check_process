@@ -1,6 +1,7 @@
 ;; Test complet
 	; Manifest
 		domain="domain.tld"	(DOMAIN)
+		path="/path"	(PATH)
 		admin="john"	(USER)
     admin_password="secret"
     language="en"
@@ -10,8 +11,8 @@
 		setup_sub_dir=0
 		setup_root=1
 		setup_nourl=0
-		setup_private=0
-		setup_public=0
+		setup_private=1
+		setup_public=1
 		upgrade=1
 		backup_restore=1
 		multi_instance=1
@@ -22,9 +23,9 @@
 	Level 1=auto
 	Level 2=auto
 	Level 3=auto
-# LDAP integration not possible yet: https://github.com/CachetHQ/Cachet/issues/2108
+# https://github.com/YunoHost-Apps/cachet_ynh/issues/1
 	Level 4=na
-# TODO
+# https://github.com/YunoHost-Apps/cachet_ynh/issues/2
 	Level 5=1
 	Level 6=auto
 	Level 7=auto

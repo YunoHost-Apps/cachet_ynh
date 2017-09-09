@@ -21,7 +21,7 @@ ynh_abort_if_errors
 #=================================================
 
 domain=$YNH_APP_ARG_DOMAIN
-path_url="/"
+path_url=$YNH_APP_ARG_PATH
 admin=$YNH_APP_ARG_ADMIN
 admin_password=$YNH_APP_ARG_ADMIN_PASSWORD
 is_public=$YNH_APP_ARG_IS_PUBLIC
@@ -121,8 +121,9 @@ ynh_replace_string "MAIL_HOST=mailtrap.io" "MAIL_HOST=" "$env_conf"
 ynh_replace_string "MAIL_PORT=2525" "MAIL_PORT=25" "$env_conf"
 ynh_replace_string "MAIL_USERNAME=null" "MAIL_USERNAME=null" "$env_conf"
 ynh_replace_string "MAIL_PASSWORD=null" "MAIL_PASSWORD=null" "$env_conf"
-ynh_replace_string "MAIL_ADDRESS=null" "MAIL_ADDRESS=cachet@$domain" "$env_conf"
-ynh_replace_string "MAIL_NAME=null" "MAIL_NAME=Cachet" "$env_conf"
+admin_mail="$(ynh_user_get_info $admin mail)"
+ynh_replace_string "MAIL_ADDRESS=null" "MAIL_ADDRESS=$admin_mail" "$env_conf"
+ynh_replace_string "MAIL_NAME=null" "MAIL_NAME=$admin" "$env_conf"
 
 # Disable reporting to CachetHQ servers
 echo "CACHET_BEACON=false" >> "$env_conf"
@@ -166,8 +167,7 @@ password_hash="$(cd $final_path ; php artisan tinker -q  --no-ansi   <<< "echo H
 password_pash="${password_hash::-1}" # Remove last character
 ynh_replace_string "__PASSWORD_HASH__" "$password_pash" "$sql_conf"
 
-mail="$(ynh_user_get_info $admin mail)"
-ynh_replace_string "__EMAIL__" "$mail" "$sql_conf"
+ynh_replace_string "__EMAIL__" "$admin_mail" "$sql_conf"
 
 ynh_mysql_connect_as "$db_name" "$db_pwd" "$db_name" \
     < "$sql_conf"
