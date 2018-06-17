@@ -6,7 +6,7 @@
         "en": "Open source status page system",
         "fr": "Système de page de statut open source"
     },
-    "version": "2.3.12",
+    "version": "2.3.15~ynh1",
     "url": "https://cachethq.io/",
     "license": "BSD-3-Clause",
     "maintainer": {
@@ -42,7 +42,7 @@
                 },
                 "example": "/",
                 "default": "/"
-            },            
+            },
             {
                 "name": "admin",
                 "type": "user",
