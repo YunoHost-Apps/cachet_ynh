@@ -1,7 +1,6 @@
 ;; Test complet
 	; Manifest
 		domain="domain.tld"	(DOMAIN)
-		path="/path"	(PATH)
 		admin="john"	(USER)
     admin_password="secret"
     language="en"
