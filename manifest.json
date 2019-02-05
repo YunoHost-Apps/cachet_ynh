@@ -34,16 +34,6 @@
                 "example": "domain.org"
             },
             {
-                "name": "path",
-		            "type": "path",
-                "ask": {
-                    "en": "Choose a path; only / is allowed at the moment.",
-                    "fr": "Choisissez un chemin, seul / est autorisé pour le moment."
-                },
-                "example": "/",
-                "default": "/"
-            },
-            {
                 "name": "admin",
                 "type": "user",
                 "ask": {

@@ -33,6 +33,11 @@ This is a [Cachet](https://cachethq.io/) package for YunoHost.
 - Must necessarily be installed on domain root (see upstream issue [here](https://github.com/CachetHQ/Cachet/issues/1696))
 - Can't integrate with YunoHost SSO as LDAP support is not implemented yet (see upstream issue [here](https://github.com/CachetHQ/Cachet/issues/2108))
 
+#### Supported architectures
+
+* x86-64b - [![Build Status](https://ci-apps.yunohost.org/ci/logs/cachet%20%28Community%29.svg)](https://ci-apps.yunohost.org/ci/apps/cachet/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/cachet%20%28Community%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/cachet/)
+* Jessie x86-64b - [![Build Status](https://ci-stretch.nohost.me/ci/logs/cachet%20%28Community%29.svg)](https://ci-stretch.nohost.me/ci/apps/cachet/)
 
 ## Links
 
