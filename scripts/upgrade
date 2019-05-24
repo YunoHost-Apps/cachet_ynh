@@ -133,7 +133,7 @@ fi
 #=================================================
 
 exec_artisan "app:update"
-rm -rf bootstrap/cache/*
+ynh_secure_remove --file=bootstrap/cache/*
 
 #=================================================
 # GENERIC FINALIZATION
