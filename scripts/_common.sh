@@ -36,7 +36,7 @@ init_composer() {
 
   # update dependencies to create composer.lock
   exec_composer "$destdir" install --no-dev \
-    || ynh_die "Unable to update Roundcube core dependencies"
+    || ynh_die "Unable to update Cachet core dependencies"
 }
 
 # Execute a command with occ
