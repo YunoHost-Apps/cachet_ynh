@@ -5,7 +5,7 @@
 # =============================================================================
 
 # Package dependencies
-pkg_dependencies="php5-gd php5-mcrypt php-mbstring"
+pkg_dependencies="php-gd php-mbstring"
 
 # =============================================================================
 # COMMON CACHET FUNCTIONS
