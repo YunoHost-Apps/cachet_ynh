@@ -6,7 +6,7 @@
         "en": "Open source status page system",
         "fr": "Système de page de statut open source"
     },
-    "version": "2.3.18~ynh1",
+    "version": "2.4.0-dev-7897744356bf81a2bcbc734f132eb5daafa889611c9c72fb2501afb3e9007cac~ynh1",
     "url": "https://cachethq.io/",
     "license": "BSD-3-Clause",
     "maintainer": {
@@ -14,7 +14,7 @@
         "email": "jimmy@monin.net"
     },
     "requirements": {
-        "yunohost": ">= 3.5.0"
+        "yunohost": ">= 3.8.1"
     },
     "multi_instance": true,
     "services": [

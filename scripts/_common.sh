@@ -4,8 +4,8 @@
 # COMMON VARIABLES
 #=================================================
 
-# dependencies used by the app
-pkg_dependencies="php-gd php-mbstring"
+YNH_PHP_VERSION="7.3"
+extra_php_dependencies="php${YNH_PHP_VERSION}-gd php${YNH_PHP_VERSION}-mbstring php${YNH_PHP_VERSION}-xml php${YNH_PHP_VERSION}-mysql php${YNH_PHP_VERSION}-sqlite3"
 
 #=================================================
 # PERSONAL HELPERS
@@ -14,7 +14,7 @@ pkg_dependencies="php-gd php-mbstring"
 # Execute a command with occ
 exec_artisan() {
   (cd "$final_path" && 
-      php artisan "$@")
+      php$YNH_PHP_VERSION artisan $@ --quiet --no-interaction)
 }
 
 #=================================================
@@ -50,7 +50,7 @@ ynh_composer_exec () {
 	# Manage arguments with getopts
 	ynh_handle_getopts_args "$@"
 	workdir="${workdir:-$final_path}"
-	phpversion="${phpversion:-7.0}"
+	phpversion="${phpversion:-$YNH_PHP_VERSION}"
 
 	COMPOSER_HOME="$workdir/.composer" \
 		php${phpversion} "$workdir/composer.phar" $commands \
@@ -73,7 +73,7 @@ ynh_install_composer () {
 	# Manage arguments with getopts
 	ynh_handle_getopts_args "$@"
 	workdir="${workdir:-$final_path}"
-	phpversion="${phpversion:-7.0}"
+	phpversion="${phpversion:-$YNH_PHP_VERSION}"
 	install_args="${install_args:-}"
 
 	curl -sS https://getcomposer.org/installer \

@@ -8,6 +8,7 @@
 
 source _common.sh
 source /usr/share/yunohost/helpers
+source _ynh_add_fpm_config
 
 #=================================================
 # LOAD SETTINGS
@@ -82,9 +83,18 @@ path_url=$(ynh_normalize_url_path --path_url=$path_url)
 #=================================================
 
 #=================================================
+# PHP-FPM CONFIGURATION
+#=================================================
+ynh_script_progression --message="Upgrading php-fpm configuration..." --weight=1
+
+# Recreate a dedicated php-fpm config
+ynh_add_fpm_config --phpversion="$YNH_PHP_VERSION" --package="$extra_php_dependencies"
+
+#=================================================
 # SET MAINTENANCE MODE ON
 #=================================================
 
+# We need to have the required version of PHP, hence PHP-FPM block is executed beforehand
 exec_artisan "down"
 
 #=================================================
@@ -94,9 +104,21 @@ exec_artisan "down"
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Upgrading source files..." --weight=1
+	# Backup essential configuration files
+	tmpdir=$(mktemp -d)
+	mv $final_path/.env $tmpdir
+	mv $final_path/bootstrap/cachet/production.php $tmpdir
+	
+	# Remove every old application files
+	ynh_secure_remove --file="$final_path" # /bootstrap/cache/*
 
 	# Download, check integrity, uncompress and patch the source from app.src
 	ynh_setup_source --dest_dir="$final_path"
+
+	# Restore configuration files
+	mv $tmpdir/.env $final_path
+	mv $tmpdir/production.php $final_path/bootstrap/cachet/
+	ynh_secure_remove --file="$tmpdir"
 fi
 
 #=================================================
@@ -105,14 +127,7 @@ fi
 ynh_script_progression --message="Upgrading nginx web server configuration..." --weight=1
 
 # Create a dedicated nginx config
-ynh_add_nginx_config
-
-#=================================================
-# UPGRADE DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Upgrading dependencies..." --weight=1
-
-ynh_install_app_dependencies $pkg_dependencies
+ynh_add_nginx_config YNH_PHP_VERSION
 
 #=================================================
 # CREATE DEDICATED USER
@@ -123,29 +138,16 @@ ynh_script_progression --message="Making sure dedicated system user exists..." -
 ynh_system_user_create --username=$app
 
 #=================================================
-# PHP-FPM CONFIGURATION
-#=================================================
-ynh_script_progression --message="Upgrading php-fpm configuration..." --weight=1
-
-# Create a dedicated php-fpm config
-ynh_add_fpm_config
-
-#=================================================
 # SPECIFIC UPGRADE
 #=================================================
 
 ynh_script_progression --message="Upgrading Cachet configuration and dependencies..." --weight=20
 
 #=================================================
-# UPDATE DEPENDENCIES WITH COMPOSER
+# INSTALL AND INITIALIZE COMPOSER
 #=================================================
 
-# Check if dependencies need to be updated with composer
-if [[ -f ${final_path}/composer.json ]]; then
-	ynh_composer_exec --commands="update --no-dev --prefer-dist"
-else
-	ynh_install_composer
-fi
+ynh_install_composer --install_args="--optimize-autoloader"
 
 #=================================================
 # UPDATE CACHET CONFIGURATION

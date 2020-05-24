@@ -8,6 +8,7 @@
 
 source _common.sh
 source /usr/share/yunohost/helpers
+source _ynh_add_fpm_config
 
 #=================================================
 # MANAGE SCRIPT FAILURE
@@ -62,13 +63,6 @@ ynh_app_setting_set --app=$app --key=language --value=$language
 #=================================================
 
 #=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-ynh_script_progression --message="Installing dependencies..." --weight=6
-
-ynh_install_app_dependencies $pkg_dependencies
-
-#=================================================
 # CREATE A MYSQL DATABASE
 #=================================================
 ynh_script_progression --message="Creating a MySQL database..." --weight=1
@@ -95,7 +89,7 @@ ynh_script_progression --message="Configuring nginx web server..." --weight=1
 ### `ynh_add_nginx_config` will use the file conf/nginx.conf
 
 # Create a dedicated nginx config
-ynh_add_nginx_config
+ynh_add_nginx_config YNH_PHP_VERSION
 
 #=================================================
 # CREATE DEDICATED USER
@@ -108,10 +102,10 @@ ynh_system_user_create --username=$app
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring php-fpm..." --weight=2
+ynh_script_progression --message="Configuring php-fpm..." --weight=8
 
 # Create a dedicated php-fpm config
-ynh_add_fpm_config
+ynh_add_fpm_config --phpversion=$YNH_PHP_VERSION --package="$extra_php_dependencies"
 
 #=================================================
 # SPECIFIC SETUP
@@ -132,9 +126,9 @@ ynh_replace_string --match_string="DB_DATABASE=cachet" --replace_string="DB_DATA
 ynh_replace_string --match_string="DB_USERNAME=homestead" --replace_string="DB_USERNAME=$db_name" --target_file="$env_conf"
 ynh_replace_string --match_string="DB_PASSWORD=secret" --replace_string="DB_PASSWORD=$db_pwd" --target_file="$env_conf"
 
-ynh_replace_string --match_string="MAIL_DRIVER=smtp" --replace_string="MAIL_DRIVER=sendmail" --target_file="$env_conf"
-ynh_replace_string --match_string="MAIL_HOST=mailtrap.io" --replace_string="MAIL_HOST=" --target_file="$env_conf"
-ynh_replace_string --match_string="MAIL_PORT=2525" --replace_string="MAIL_PORT=25" --target_file="$env_conf"
+ynh_replace_string --match_string="MAIL_DRIVER=log" --replace_string="MAIL_DRIVER=sendmail" --target_file="$env_conf"
+ynh_replace_string --match_string="MAIL_HOST=null" --replace_string="MAIL_HOST=" --target_file="$env_conf"
+ynh_replace_string --match_string="MAIL_PORT=null" --replace_string="MAIL_PORT=25" --target_file="$env_conf"
 ynh_replace_string --match_string="MAIL_USERNAME=null" --replace_string="MAIL_USERNAME=null" --target_file="$env_conf"
 ynh_replace_string --match_string="MAIL_PASSWORD=null" --replace_string="MAIL_PASSWORD=null" --target_file="$env_conf"
 admin_mail="$(ynh_user_get_info $admin mail)"
@@ -142,22 +136,21 @@ ynh_replace_string --match_string="MAIL_ADDRESS=null" --replace_string="MAIL_ADD
 ynh_replace_string --match_string="MAIL_NAME=null" --replace_string="MAIL_NAME=$admin" --target_file="$env_conf"
 
 # Disable reporting to CachetHQ servers
-echo "CACHET_BEACON=false" >> "$env_conf"
-
+ynh_replace_string --match_string="CACHET_BEACON=true" --replace_string="CACHET_BEACON=false" --target_file="$env_conf"
 ynh_store_file_checksum "$env_conf"
 
 #=================================================
 # INSTALL AND INITIALIZE COMPOSER
 #=================================================
 
-ynh_install_composer
+ynh_install_composer --install_args="--optimize-autoloader"
 
 #=================================================
 # FINALIZE CACHET INSTALLATION
 #=================================================
 
 exec_artisan "key:generate"
-exec_artisan "app:install"
+exec_artisan "cachet:install"
 
 #=================================================
 # FINALIZE CACHET CONFIGURATION
@@ -169,7 +162,7 @@ ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain$path_ur
 ynh_replace_string --match_string="__USER__" --replace_string="$admin" --target_file="$sql_conf"
 ynh_replace_string --match_string="__LANGUAGE__" --replace_string="$language" --target_file="$sql_conf"
 
-password_hash="$(cd $final_path ; php artisan tinker -q  --no-ansi   <<< "echo Hash::make('$admin_password');" |head -n 1)"
+password_hash="$(cd $final_path ; php$YNH_PHP_VERSION artisan tinker -q  --no-ansi   <<< "echo Hash::make('$admin_password');" |head -n 1)"
 password_pash="${password_hash::-1}" # Remove last character
 ynh_replace_string --match_string="__PASSWORD_HASH__" --replace_string="$password_pash" --target_file="$sql_conf"
 

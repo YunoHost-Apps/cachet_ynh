@@ -13,7 +13,7 @@
 		setup_private=1
 		setup_public=1
 		upgrade=1
-		upgrade=1 from_commit=9a06e3b29bad16c2f360fa0431e2d6f950ea8964
+		upgrade=1 from_commit=7497ea8b6915b725358db0d4a1210f999961cfee
 		backup_restore=1
 		multi_instance=1
 		incorrect_path=0
@@ -25,6 +25,6 @@
 Email=
 Notification=none
 ;;; Upgrade options
-	; commit=9a06e3b29bad16c2f360fa0431e2d6f950ea8964
-		name=Fix dependencies, add change_url script, minor changes
+	; commit=7497ea8b6915b725358db0d4a1210f999961cfee
+		name=Update dependencies for buster
 		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&admin_password=secret&language=en&is_public=1&
