@@ -1,5 +1,5 @@
-SOURCE_URL=https://github.com/CachetHQ/Cachet/archive/v2.3.18.tar.gz
-SOURCE_SUM=ba74a1f83a0d4f800d02584de285bfabe28b4c5e2408b23af30a2dee9d65174d
+SOURCE_URL=https://github.com/CachetHQ/Cachet/archive/c7ad51e87645e5a717fb817616424276a8e5345b.tar.gz
+SOURCE_SUM=7897744356bf81a2bcbc734f132eb5daafa889611c9c72fb2501afb3e9007cac
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true

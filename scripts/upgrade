@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-# TODO : php artisan down & up
 #=================================================
 # GENERIC START
 #=================================================
@@ -10,123 +8,146 @@
 
 source _common.sh
 source /usr/share/yunohost/helpers
+source _ynh_add_fpm_config
 
 #=================================================
 # LOAD SETTINGS
 #=================================================
+ynh_script_progression --message="Loading installation settings..." --weight=1
 
 app=$YNH_APP_INSTANCE_NAME
 
-domain=$(ynh_app_setting_get $app domain)
-path_url=$(ynh_app_setting_get $app path)
-final_path=$(ynh_app_setting_get $app final_path)
-db_name=$(ynh_app_setting_get $app db_name)
-db_pwd=$(ynh_app_setting_get $app mysqlpwd)
+domain=$(ynh_app_setting_get --app=$app --key=domain)
+path_url=$(ynh_app_setting_get --app=$app --key=path)
+admin=$(ynh_app_setting_get --app=$app --key=admin)
+is_public=$(ynh_app_setting_get --app=$app --key=is_public)
+final_path=$(ynh_app_setting_get --app=$app --key=final_path)
+language=$(ynh_app_setting_get --app=$app --key=language)
+db_name=$(ynh_app_setting_get --app=$app --key=db_name)
+
+#=================================================
+# CHECK VERSION
+#=================================================
+
+upgrade_type=$(ynh_check_app_version_changed)
+
+#=================================================
+# ENSURE DOWNWARD COMPATIBILITY
+#=================================================
+ynh_script_progression --message="Ensuring downward compatibility..." --weight=1
+
+# Fix is_public as a boolean value
+if [ "$is_public" = "Yes" ]; then
+	ynh_app_setting_set --app=$app --key=is_public --value=1
+	is_public=1
+elif [ "$is_public" = "No" ]; then
+	ynh_app_setting_set --app=$app --key=is_public --value=0
+	is_public=0
+fi
+
+# If db_name doesn't exist, create it
+if [ -z "$db_name" ]; then
+	db_name=$(ynh_sanitize_dbid --db_name=$app)
+	ynh_app_setting_set --app=$app --key=db_name --value=$db_name
+fi
+
+# If final_path doesn't exist, create it
+if [ -z "$final_path" ]; then
+	final_path=/var/www/$app
+	ynh_app_setting_set --app=$app --key=final_path --value=$final_path
+fi
 
 #=================================================
 # BACKUP BEFORE UPGRADE THEN ACTIVE TRAP
 #=================================================
+ynh_script_progression --message="Backing up the app before upgrading (may take a while)..." --weight=4
 
-ynh_backup_before_upgrade	# Backup the current version of the app
+# Backup the current version of the app
+ynh_backup_before_upgrade
 ynh_clean_setup () {
-	ynh_restore_upgradebackup	# restore it if the upgrade fails
+	# restore it if the upgrade fails
+	ynh_restore_upgradebackup
 }
-ynh_abort_if_errors	# Active trap pour arrêter le script si une erreur est détectée.
+# Exit if an error occurs during the execution of the script
+ynh_abort_if_errors
 
 #=================================================
 # CHECK THE PATH
 #=================================================
 
 # Normalize the URL path syntax
-path_url=$(ynh_normalize_url_path $path_url)
+path_url=$(ynh_normalize_url_path --path_url=$path_url)
 
 #=================================================
 # STANDARD UPGRADE STEPS
 #=================================================
-# INSTALL DEPENDENCIES
-#=================================================
-
-ynh_install_app_dependencies "$pkg_dependencies"
 
 #=================================================
-# CREATE DEDICATED USER
+# PHP-FPM CONFIGURATION
 #=================================================
+ynh_script_progression --message="Upgrading php-fpm configuration..." --weight=1
 
-# Create a system user
-ynh_system_user_create $app
+# Recreate a dedicated php-fpm config
+ynh_add_fpm_config --phpversion="$YNH_PHP_VERSION" --package="$extra_php_dependencies"
 
 #=================================================
 # SET MAINTENANCE MODE ON
 #=================================================
 
+# We need to have the required version of PHP, hence PHP-FPM block is executed beforehand
 exec_artisan "down"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 
-ynh_app_setting_set $app final_path $final_path
-# Download, check integrity, uncompress and patch the source from app.src
-ynh_setup_source "$final_path"
+if [ "$upgrade_type" == "UPGRADE_APP" ]
+then
+	ynh_script_progression --message="Upgrading source files..." --weight=1
+	# Backup essential configuration files
+	tmpdir=$(mktemp -d)
+	mv $final_path/.env $tmpdir
+	mv $final_path/bootstrap/cachet/production.php $tmpdir
+	
+	# Remove every old application files
+	ynh_secure_remove --file="$final_path" # /bootstrap/cache/*
+
+	# Download, check integrity, uncompress and patch the source from app.src
+	ynh_setup_source --dest_dir="$final_path"
+
+	# Restore configuration files
+	mv $tmpdir/.env $final_path
+	mv $tmpdir/production.php $final_path/bootstrap/cachet/
+	ynh_secure_remove --file="$tmpdir"
+fi
 
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
+ynh_script_progression --message="Upgrading nginx web server configuration..." --weight=1
 
 # Create a dedicated nginx config
-ynh_add_nginx_config
+ynh_add_nginx_config YNH_PHP_VERSION
 
 #=================================================
-# PHP-FPM CONFIGURATION
+# CREATE DEDICATED USER
 #=================================================
+ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
 
-# Create a dedicated php-fpm config
-ynh_add_fpm_config
+# Create a dedicated user (if not existing)
+ynh_system_user_create --username=$app
 
 #=================================================
 # SPECIFIC UPGRADE
 #=================================================
 
-#=================================================
-# CONFIGURE CACHET
-#=================================================
-
-# env_conf="$final_path/.env"
-
-# # Verify the checksum and backup the file if it's different
-# ynh_backup_if_checksum_is_different "$env_conf"
-
-# cp $final_path/.env.example $env_conf
-# ynh_replace_string "APP_URL=http://localhost" "APP_URL=https://$domain$path_url" "$env_conf"  
-# ynh_replace_string "APP_KEY=SomeRandomString" "APP_KEY=$(ynh_string_random 24)" "$env_conf"
-
-# ynh_replace_string "DB_DATABASE=cachet" "DB_DATABASE=$db_name" "$env_conf"
-# ynh_replace_string "DB_USERNAME=homestead" "DB_USERNAME=$db_name" "$env_conf"
-# ynh_replace_string "DB_PASSWORD=secret" "DB_PASSWORD=$db_pwd" "$env_conf"
-
-# ynh_replace_string "MAIL_DRIVER=smtp" "MAIL_DRIVER=sendmail" "$env_conf"
-# ynh_replace_string "MAIL_HOST=mailtrap.io" "MAIL_HOST=" "$env_conf"
-# ynh_replace_string "MAIL_PORT=2525" "MAIL_PORT=25" "$env_conf"
-# ynh_replace_string "MAIL_USERNAME=null" "MAIL_USERNAME=null" "$env_conf"
-# ynh_replace_string "MAIL_PASSWORD=null" "MAIL_PASSWORD=null" "$env_conf"
-# ynh_replace_string "MAIL_ADDRESS=null" "MAIL_ADDRESS=cachet@$domain" "$env_conf"
-# ynh_replace_string "MAIL_NAME=null" "MAIL_NAME=Cachet" "$env_conf"
-
-# # Disable reporting to CachetHQ servers
-# echo "CACHET_BEACON=false" >> "$env_conf"
-
-# ynh_store_file_checksum "$env_conf"
+ynh_script_progression --message="Upgrading Cachet configuration and dependencies..." --weight=20
 
 #=================================================
-# UPDATE DEPENDENCIES WITH COMPOSER
+# INSTALL AND INITIALIZE COMPOSER
 #=================================================
 
-# Check if dependencies need to be updated with composer
-if [[ -f ${final_path}/composer.json ]]; then
-  exec_composer "${final_path}" update --no-dev --prefer-dist
-else
-  init_composer "${final_path}"
-fi
+ynh_install_composer --install_args="--optimize-autoloader"
 
 #=================================================
 # UPDATE CACHET CONFIGURATION
@@ -138,12 +159,26 @@ ynh_secure_remove --file=bootstrap/cache/*
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
+
+#=================================================
 # SECURE FILES AND DIRECTORIES
 #=================================================
 
-# Set permissions to app files
-chown -R root: "$final_path"
+# Set permissions on app files
+chown -R root: $final_path
 chown -R $app: "${final_path}/.env" "${final_path}/storage/" "${final_path}/bootstrap/"
+
+#=================================================
+# SETUP SSOWAT
+#=================================================
+ynh_script_progression --message="Upgrading SSOwat configuration..." --weight=1
+
+# Make app public if necessary
+if [ $is_public -eq 1 ]
+then
+	# unprotected_uris allows SSO credentials to be passed anyway
+	ynh_app_setting_set --app=$app --key=unprotected_uris --value="/"
+fi
 
 #=================================================
 # SET MAINTENANCE MODE OFF
@@ -154,5 +189,12 @@ exec_artisan "up"
 #=================================================
 # RELOAD NGINX
 #=================================================
+ynh_script_progression --message="Reloading nginx web server..." --weight=1
 
-systemctl reload nginx
+ynh_systemd_action --service_name=nginx --action=reload
+
+#=================================================
+# END OF SCRIPT
+#=================================================
+
+ynh_script_progression --message="Upgrade of $app completed" --last

@@ -1,54 +1,29 @@
+#!/bin/bash
 
-
-# =============================================================================
+#=================================================
 # COMMON VARIABLES
-# =============================================================================
+#=================================================
 
-# Package dependencies
-pkg_dependencies="php-gd php-mbstring"
+YNH_PHP_VERSION="7.3"
+extra_php_dependencies="php${YNH_PHP_VERSION}-gd php${YNH_PHP_VERSION}-mbstring php${YNH_PHP_VERSION}-xml php${YNH_PHP_VERSION}-mysql php${YNH_PHP_VERSION}-sqlite3"
 
-# =============================================================================
-# COMMON CACHET FUNCTIONS
-# =============================================================================
-
-# Execute a composer command from a given directory
-# usage: composer_exec workdir COMMAND [ARG ...]
-exec_composer() {
-  local workdir=$1
-  shift 1
-
-  COMPOSER_HOME="${workdir}/.composer" \
-    php "${workdir}/composer.phar" $@ \
-      -d "${workdir}" --quiet --no-interaction
-}
-
-# Install and initialize Composer in the given directory
-# usage: init_composer destdir
-init_composer() {
-  local destdir=$1
-
-  # install composer
-  curl -sS https://getcomposer.org/installer \
-    | COMPOSER_HOME="${destdir}/.composer" \
-        php -- --quiet --install-dir="$destdir" \
-    || ynh_die "Unable to install Composer"
-
-
-  # update dependencies to create composer.lock
-  exec_composer "$destdir" install --no-dev \
-    || ynh_die "Unable to update Cachet core dependencies"
-}
+#=================================================
+# PERSONAL HELPERS
+#=================================================
 
 # Execute a command with occ
 exec_artisan() {
   (cd "$final_path" && 
-      php artisan "$@")
-  # exec_as "$app" \
+      php$YNH_PHP_VERSION artisan $@ --quiet --no-interaction)
 }
+
+#=================================================
+# EXPERIMENTAL HELPERS
+#=================================================
 
 # Execute a command as another user
 # usage: exec_as USER COMMAND [ARG ...]
-exec_as() {
+ynh_exec_as() {
   local USER=$1
   shift 1
 
@@ -59,15 +34,57 @@ exec_as() {
   fi
 }
 
+# Execute a command with Composer
+#
+# usage: ynh_composer_exec [--phpversion=phpversion] [--workdir=$final_path] --commands="commands"
+# | arg: -v, --phpversion - PHP version to use with composer
+# | arg: -w, --workdir - The directory from where the command will be executed. Default $final_path.
+# | arg: -c, --commands - Commands to execute.
+ynh_composer_exec () {
+	# Declare an array to define the options of this helper.
+	local legacy_args=vwc
+	declare -Ar args_array=( [v]=phpversion= [w]=workdir= [c]=commands= )
+	local phpversion
+	local workdir
+	local commands
+	# Manage arguments with getopts
+	ynh_handle_getopts_args "$@"
+	workdir="${workdir:-$final_path}"
+	phpversion="${phpversion:-$YNH_PHP_VERSION}"
 
-# ============= FUTURE YUNOHOST HELPER =============
-# Delete a file checksum from the app settings
-#
-# $app should be defined when calling this helper
-#
-# usage: ynh_remove_file_checksum file
-# | arg: file - The file for which the checksum will be deleted
-ynh_delete_file_checksum () {
-	local checksum_setting_name=checksum_${1//[\/ ]/_}	# Replace all '/' and ' ' by '_'
-	ynh_app_setting_delete $app $checksum_setting_name
+	COMPOSER_HOME="$workdir/.composer" \
+		php${phpversion} "$workdir/composer.phar" $commands \
+		-d "$workdir" --quiet --no-interaction
 }
+
+# Install and initialize Composer in the given directory
+#
+# usage: ynh_install_composer [--phpversion=phpversion] [--workdir=$final_path] [--install_args="--optimize-autoloader"]
+# | arg: -v, --phpversion - PHP version to use with composer
+# | arg: -w, --workdir - The directory from where the command will be executed. Default $final_path.
+# | arg: -a, --install_args - Additional arguments provided to the composer install. Argument --no-dev already include
+ynh_install_composer () {
+	# Declare an array to define the options of this helper.
+	local legacy_args=vwa
+	declare -Ar args_array=( [v]=phpversion= [w]=workdir= [a]=install_args=)
+	local phpversion
+	local workdir
+	local install_args
+	# Manage arguments with getopts
+	ynh_handle_getopts_args "$@"
+	workdir="${workdir:-$final_path}"
+	phpversion="${phpversion:-$YNH_PHP_VERSION}"
+	install_args="${install_args:-}"
+
+	curl -sS https://getcomposer.org/installer \
+		| COMPOSER_HOME="$workdir/.composer" \
+		php${phpversion} -- --quiet --install-dir="$workdir" \
+		|| ynh_die "Unable to install Composer."
+
+	# update dependencies to create composer.lock
+	ynh_composer_exec --phpversion="${phpversion}" --workdir="$workdir" --commands="install --no-dev $install_args" \
+		|| ynh_die "Unable to update core dependencies with Composer."
+}
+#=================================================
+# FUTURE OFFICIAL HELPERS
+#=================================================
