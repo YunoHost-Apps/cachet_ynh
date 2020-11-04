@@ -34,6 +34,7 @@ ynh_exec_as() {
   fi
 }
 
+
 readonly YNH_DEFAULT_COMPOSER_VERSION=1.10.17
 # Declare the actual composer version to use.
 # A packager willing to use another version of composer can override the variable into its _common.sh.
