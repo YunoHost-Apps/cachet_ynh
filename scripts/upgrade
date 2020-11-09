@@ -8,7 +8,6 @@
 
 source _common.sh
 source /usr/share/yunohost/helpers
-source _ynh_add_fpm_config
 
 #=================================================
 # LOAD SETTINGS
@@ -85,9 +84,9 @@ path_url=$(ynh_normalize_url_path --path_url=$path_url)
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading php-fpm configuration..." --weight=1
+ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=1
 
-# Recreate a dedicated php-fpm config
+# Recreate a dedicated PHP-FPM config
 ynh_add_fpm_config --phpversion="$YNH_PHP_VERSION" --package="$extra_php_dependencies"
 
 #=================================================
@@ -124,7 +123,7 @@ fi
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Upgrading nginx web server configuration..." --weight=1
+ynh_script_progression --message="Upgrading NGINX web server configuration..." --weight=1
 
 # Create a dedicated nginx config
 ynh_add_nginx_config YNH_PHP_VERSION
@@ -159,8 +158,6 @@ ynh_secure_remove --file=bootstrap/cache/*
 #=================================================
 # GENERIC FINALIZATION
 #=================================================
-
-#=================================================
 # SECURE FILES AND DIRECTORIES
 #=================================================
 
@@ -189,7 +186,7 @@ exec_artisan "up"
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..." --weight=1
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
