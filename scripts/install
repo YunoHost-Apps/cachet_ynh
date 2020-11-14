@@ -8,7 +8,6 @@
 
 source _common.sh
 source /usr/share/yunohost/helpers
-source _ynh_add_fpm_config
 
 #=================================================
 # MANAGE SCRIPT FAILURE
@@ -84,12 +83,10 @@ ynh_setup_source --dest_dir="$final_path"
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring nginx web server..." --weight=1
+ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
-### `ynh_add_nginx_config` will use the file conf/nginx.conf
-
-# Create a dedicated nginx config
-ynh_add_nginx_config YNH_PHP_VERSION
+# Create a dedicated NGINX config
+ynh_add_nginx_config
 
 #=================================================
 # CREATE DEDICATED USER
@@ -102,20 +99,18 @@ ynh_system_user_create --username=$app
 #=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Configuring php-fpm..." --weight=8
+ynh_script_progression --message="Configuring PHP-FPM..." --weight=8
 
 # Create a dedicated php-fpm config
-ynh_add_fpm_config --phpversion=$YNH_PHP_VERSION --package="$extra_php_dependencies"
+ynh_add_fpm_config --package="$extra_php_dependencies"
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
-
-#=================================================
 # PRE-CONFIGURE CACHET
 #=================================================
-
 ynh_script_progression --message="Configuring Cachet..." --weight=10
+
 env_conf="$final_path/.env"
 
 cp $final_path/.env.example $env_conf
@@ -204,7 +199,7 @@ fi
 #=================================================
 # RELOAD NGINX
 #=================================================
-ynh_script_progression --message="Reloading nginx web server..." --weight=1
+ynh_script_progression --message="Reloading NGINX web server..." --weight=1
 
 ynh_systemd_action --service_name=nginx --action=reload
 
