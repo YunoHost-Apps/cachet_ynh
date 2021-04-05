@@ -37,8 +37,8 @@ Totally configurable through the Cachet application dashboard.
 
 #### Supported architectures
 
-* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/cachet%20%28Apps%29.svg)](https://ci-apps.yunohost.org/ci/apps/cachet/)
-* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/cachet%20%28Apps%29.svg)](https://ci-apps-arm.yunohost.org/ci/apps/cachet/)
+* x86-64 - [![Build Status](https://ci-apps.yunohost.org/ci/logs/cachet.svg)](https://ci-apps.yunohost.org/ci/apps/cachet/)
+* ARMv8-A - [![Build Status](https://ci-apps-arm.yunohost.org/ci/logs/cachet.svg)](https://ci-apps-arm.yunohost.org/ci/apps/cachet/)
 
 ## Limitations
 
