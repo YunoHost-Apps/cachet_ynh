@@ -6,7 +6,7 @@
         "en": "Open source status page system",
         "fr": "Système de page de statut open source"
     },
-    "version": "2.4.0-dev-7897744356bf81a2bcbc734f132eb5daafa889611c9c72fb2501afb3e9007cac~ynh2",
+    "version": "2.3.18~ynh2",
     "url": "https://cachethq.io/",
     "license": "BSD-3-Clause",
     "maintainer": {
@@ -14,12 +14,12 @@
         "email": "jimmy@monin.net"
     },
     "requirements": {
-        "yunohost": ">= 3.8.1"
+        "yunohost": ">= 4.1.7"
     },
     "multi_instance": true,
     "services": [
         "nginx",
-        "php7.0-fpm",
+        "php7.3-fpm",
         "mysql"
     ],
     "arguments": {
@@ -27,19 +27,11 @@
             {
                 "name": "domain",
                 "type": "domain",
-                "ask": {
-                    "en": "Choose a domain for Cachet",
-                    "fr": "Choisissez un domaine pour Cachet"
-                },
                 "example": "domain.org"
             },
             {
                 "name": "admin",
                 "type": "user",
-                "ask": {
-                    "en": "Choose the only allowed admin user",
-                    "fr": "Choisissez l'unique utilisateur autorisé"
-                },
                 "example": "johndoe"
             },
             {
@@ -55,10 +47,6 @@
             {
                 "name": "is_public",
                 "type": "boolean",
-                "ask": {
-                    "en": "Is it a public application?",
-                    "fr": "Est-ce une application publique ?"
-                },
                 "default": true
             },
             {
