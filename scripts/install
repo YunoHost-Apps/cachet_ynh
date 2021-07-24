@@ -71,6 +71,14 @@ ynh_app_setting_set --app=$app --key=db_name --value=$db_name
 ynh_mysql_setup_db --db_user=$db_user --db_name=$db_name
 
 #=================================================
+# CREATE DEDICATED USER
+#=================================================
+ynh_script_progression --message="Configuring system user..." --weight=2
+
+# Create a system user
+ynh_system_user_create --username=$app --home_dir="$final_path"
+
+#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression --message="Setting up source files..." --weight=5
@@ -79,6 +87,10 @@ ynh_app_setting_set --app=$app --key=final_path --value=$final_path
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$final_path"
 
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
+
 #=================================================
 # NGINX CONFIGURATION
 #=================================================
@@ -86,14 +98,6 @@ ynh_script_progression --message="Configuring NGINX web server..." --weight=1
 
 # Create a dedicated NGINX config
 ynh_add_nginx_config
-
-#=================================================
-# CREATE DEDICATED USER
-#=================================================
-ynh_script_progression --message="Configuring system user..." --weight=2
-
-# Create a system user
-ynh_system_user_create --username=$app
 
 #=================================================
 # PHP-FPM CONFIGURATION
@@ -150,6 +154,8 @@ exec_artisan "cachet:install"
 # FINALIZE CACHET CONFIGURATION
 #=================================================
 
+domain=$domain$path_url
+
 # Populate MySQL database
 sql_conf="../conf/init-mysql.sql"
 ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain$path_url" --target_file="$sql_conf"
@@ -166,22 +172,9 @@ ynh_mysql_connect_as --user="$db_name" --password="$db_pwd" --database="$db_name
     < "$sql_conf"
 
 # Create production.php to finalize installation
-production_conf="$final_path/bootstrap/cachet/production.php"
-cp ../conf/production.php $production_conf
-ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain$path_url" --target_file="$production_conf"
-ynh_replace_string --match_string="__LANGUAGE__" --replace_string="$language" --target_file="$production_conf"   
-chown $app: $final_path/bootstrap/cachet/production.php
-ynh_store_file_checksum --file="$production_conf"
-
-#=================================================
-# GENERIC FINALIZATION
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-
-# Set permissions to app files
-chown -R root: $final_path
-chown -R $app: "${final_path}/.env" "${final_path}/storage/" "${final_path}/bootstrap/"
+domain=$domain$path_url
+ynh_add_config --template="../conf/production.php" --destination="$final_path/bootstrap/cachet/production.php"
+chown $app $final_path/bootstrap/cachet/production.php
 
 #=================================================
 # SETUP SSOWAT
