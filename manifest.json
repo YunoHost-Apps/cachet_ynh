@@ -14,7 +14,7 @@
         "email": "jimmy@monin.net"
     },
     "requirements": {
-        "yunohost": ">= 4.1.7"
+        "yunohost": ">= 4.3.0"
     },
     "multi_instance": true,
     "services": [
@@ -26,23 +26,16 @@
         "install" : [
             {
                 "name": "domain",
-                "type": "domain",
-                "example": "domain.org"
+                "type": "domain"
             },
             {
                 "name": "admin",
-                "type": "user",
-                "example": "johndoe"
+                "type": "user"
             },
             {
                 "name": "admin_password",
                 "type": "password",
-                "optional": true,
-                "ask": {
-                  "en": "Set the password for admin user",
-                  "fr": "Définissez le mot de passe pour l'utilisateur"
-                },
-                "example": "supersecretpassword"
+                "optional": true
             },
             {
                 "name": "is_public",
