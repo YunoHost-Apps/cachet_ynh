@@ -8,6 +8,13 @@
     },
     "version": "2.3.18~ynh2",
     "url": "https://cachethq.io/",
+    "upstream": {
+        "license": "BSD-3-Clause",
+        "website": "https://cachethq.io/",
+        "demo": "https://demo.cachethq.io/",
+        "admindoc": "https://docs.cachethq.io/",
+        "code": "https://github.com/CachetHQ/Cachet"
+    },
     "license": "BSD-3-Clause",
     "maintainer": {
         "name": "JimboJoe",
@@ -33,7 +40,7 @@
                 "type": "user"
             },
             {
-                "name": "admin_password",
+                "name": "password",
                 "type": "password",
                 "optional": true
             },

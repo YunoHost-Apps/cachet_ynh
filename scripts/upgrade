@@ -125,14 +125,16 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..." -
 ynh_add_nginx_config
 
 #=================================================
+# UPGRADE DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Upgrading dependencies..." --weight=6
+
+ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
 # SPECIFIC UPGRADE
 #=================================================
-
 ynh_script_progression --message="Upgrading Cachet configuration and dependencies..." --weight=20
-
-#=================================================
-# INSTALL AND INITIALIZE COMPOSER
-#=================================================
 
 ynh_install_composer --install_args="--optimize-autoloader"
 
@@ -150,8 +152,9 @@ ynh_secure_remove --file=bootstrap/cache/*
 #=================================================
 
 # Set permissions on app files
-chown -R root: $final_path
-chown -R $app: "${final_path}/.env" "${final_path}/storage/" "${final_path}/bootstrap/"
+chmod 750 "$final_path"
+chmod -R o-rwx "$final_path"
+chown -R $app:www-data "$final_path"
 
 #=================================================
 # SET MAINTENANCE MODE OFF
