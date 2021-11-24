@@ -137,14 +137,14 @@ exec_artisan "cachet:install"
 # Populate MySQL database
 sql_conf="../conf/init-mysql.sql"
 ynh_replace_string --match_string="__DOMAIN__" --replace_string="$domain$path_url" --target_file="$sql_conf"
-ynh_replace_string --match_string="__USER__" --replace_string="$admin" --target_file="$sql_conf"
+ynh_replace_string --match_string="__ADMIN__" --replace_string="$admin" --target_file="$sql_conf"
 ynh_replace_string --match_string="__LANGUAGE__" --replace_string="$language" --target_file="$sql_conf"
 
 password_hash="$(cd $final_path ; php$YNH_PHP_VERSION artisan tinker -q  --no-ansi   <<< "echo Hash::make('$admin_password');" |head -n 1)"
 password_pash="${password_hash::-1}" # Remove last character
 ynh_replace_string --match_string="__PASSWORD_HASH__" --replace_string="$password_pash" --target_file="$sql_conf"
 
-ynh_replace_string --match_string="__EMAIL__" --replace_string="$admin_mail" --target_file="$sql_conf"
+ynh_replace_string --match_string="__EMAIL__" --replace_string="$email" --target_file="$sql_conf"
 
 ynh_mysql_connect_as --user="$db_name" --password="$db_pwd" --database="$db_name" \
     < "$sql_conf"
