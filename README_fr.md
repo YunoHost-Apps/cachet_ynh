@@ -18,6 +18,10 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 **Démo :** https://demo.cachethq.io/
 
+## Captures d'écran
+
+![](./doc/screenshots/main-interface.png)
+
 ## Avertissements / informations importantes
 
 ## Configuration

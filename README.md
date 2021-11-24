@@ -22,6 +22,10 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 
 **Demo:** https://demo.cachethq.io/
 
+## Screenshots
+
+![](./doc/screenshots/main-interface.png)
+
 ## Disclaimers / important information
 
 ## Configuration
