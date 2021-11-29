@@ -22,12 +22,6 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 ![](./doc/screenshots/main-interface.png)
 
-## Avertissements / informations importantes
-
-## Configuration
-
-Totally configurable through the Cachet application dashboard.
-
 ## Documentations et ressources
 
 * Site officiel de l'app : https://cachethq.io/
