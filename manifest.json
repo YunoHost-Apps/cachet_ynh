@@ -6,7 +6,7 @@
         "en": "Open source status page system",
         "fr": "Système de page de statut open source"
     },
-    "version": "2.3.18~ynh2",
+    "version": "2.4.0~ynh3",
     "url": "https://cachethq.io/",
     "upstream": {
         "license": "BSD-3-Clause",
