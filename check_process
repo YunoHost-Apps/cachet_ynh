@@ -1,10 +1,10 @@
 ;; Test complet
 	; Manifest
-		domain="domain.tld"	(DOMAIN)
-		admin="john"	(USER)
-		admin_password="secret"
+		domain="domain.tld"
+		is_public=1
 		language="en"
-		is_public=1	(PUBLIC|public=1|private=0)
+		admin="john"
+		admin_password="secret"
 	; Checks
 		pkg_linter=1
 		setup_sub_dir=0
@@ -16,11 +16,8 @@
 		upgrade=1 from_commit=7497ea8b6915b725358db0d4a1210f999961cfee
 		backup_restore=1
 		multi_instance=1
-		incorrect_path=0
 		port_already_use=0
 		change_url=1
-;;; Levels
-	Level 5=auto
 ;;; Options
 Email=
 Notification=none
