@@ -6,59 +6,38 @@
         "en": "Open source status page system",
         "fr": "Système de page de statut open source"
     },
-    "version": "2.4.0~ynh3",
-    "url": "https://cachethq.io/",
+    "version": "2.4.0~ynh4",
+    "url": "https://cachethq.io",
+    "upstream": {
+        "license": "BSD-3-Clause",
+        "website": "https://cachethq.io",
+        "demo": "https://demo.cachethq.io",
+        "admindoc": "https://docs.cachethq.io",
+        "code": "https://github.com/CachetHQ/Cachet"
+    },
     "license": "BSD-3-Clause",
     "maintainer": {
         "name": "JimboJoe",
         "email": "jimmy@monin.net"
     },
     "requirements": {
-        "yunohost": ">= 3.8.1"
+        "yunohost": ">= 4.3.0"
     },
     "multi_instance": true,
     "services": [
         "nginx",
-        "php7.0-fpm",
+        "php7.3-fpm",
         "mysql"
     ],
     "arguments": {
         "install" : [
             {
                 "name": "domain",
-                "type": "domain",
-                "ask": {
-                    "en": "Choose a domain for Cachet",
-                    "fr": "Choisissez un domaine pour Cachet"
-                },
-                "example": "domain.org"
-            },
-            {
-                "name": "admin",
-                "type": "user",
-                "ask": {
-                    "en": "Choose the only allowed admin user",
-                    "fr": "Choisissez l'unique utilisateur autorisé"
-                },
-                "example": "johndoe"
-            },
-            {
-                "name": "admin_password",
-                "type": "password",
-                "optional": true,
-                "ask": {
-                  "en": "Set the password for admin user",
-                  "fr": "Définissez le mot de passe pour l'utilisateur"
-                },
-                "example": "supersecretpassword"
+                "type": "domain"
             },
             {
                 "name": "is_public",
                 "type": "boolean",
-                "ask": {
-                    "en": "Is it a public application?",
-                    "fr": "Est-ce une application publique ?"
-                },
                 "default": true
             },
             {
@@ -70,7 +49,20 @@
                 },
                 "choices": ["fr", "en"],
                 "default": "en"
-             }
+             },
+            {
+                "name": "admin",
+                "type": "user"
+            },
+            {
+                "name": "password",
+                "type": "password",
+                "optional": true,
+                "ask": {
+                  "en": "Set the password for admin user",
+                  "fr": "Définissez le mot de passe pour l'utilisateur"
+                }
+            }
         ]
     }
 }
