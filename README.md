@@ -5,7 +5,7 @@ It shall NOT be edited by hand.
 
 # Cachet for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/cachet.svg)](https://dash.yunohost.org/appci/app/cachet) ![](https://ci-apps.yunohost.org/ci/badges/cachet.status.svg) ![](https://ci-apps.yunohost.org/ci/badges/cachet.maintain.svg)  
+[![Integration level](https://dash.yunohost.org/integration/cachet.svg)](https://dash.yunohost.org/appci/app/cachet) ![Working status](https://ci-apps.yunohost.org/ci/badges/cachet.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/cachet.maintain.svg)  
 [![Install Cachet with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=cachet)
 
 *[Lire ce readme en français.](./README_fr.md)*
@@ -18,13 +18,13 @@ If you don't have YunoHost, please consult [the guide](https://yunohost.org/#/in
 [Cachet](https://cachethq.io/) is a free, open source status page for your API, service or company. Built with all of the features that you'd expect from a status page, Cachet comes with a powerful API, a metric system, multiple user support, two factor authentication for added security and is easy to get setup. A powerful, self-hosted alternative to StatusPage.io and Status.io.
 
 
-**Shipped version:** 2.4.0~ynh4
+**Shipped version:** 2.4.0~ynh5
 
 **Demo:** https://demo.cachethq.io
 
 ## Screenshots
 
-![](./doc/screenshots/main-interface.png)
+![Screenshot of Cachet](./doc/screenshots/main-interface.png)
 
 ## Disclaimers / important information
 
@@ -39,21 +39,22 @@ Totally configurable through the Cachet application dashboard.
 
 ## Documentation and resources
 
-* Official app website: https://cachethq.io
-* Official admin documentation: https://docs.cachethq.io
-* Upstream app code repository: https://github.com/CachetHQ/Cachet
-* YunoHost documentation for this app: https://yunohost.org/app_cachet
-* Report a bug: https://github.com/YunoHost-Apps/cachet_ynh/issues
+* Official app website: <https://cachethq.io>
+* Official admin documentation: <https://docs.cachethq.io>
+* Upstream app code repository: <https://github.com/CachetHQ/Cachet>
+* YunoHost documentation for this app: <https://yunohost.org/app_cachet>
+* Report a bug: <https://github.com/YunoHost-Apps/cachet_ynh/issues>
 
 ## Developer info
 
 Please send your pull request to the [testing branch](https://github.com/YunoHost-Apps/cachet_ynh/tree/testing).
 
 To try the testing branch, please proceed like that.
-```
+
+``` bash
 sudo yunohost app install https://github.com/YunoHost-Apps/cachet_ynh/tree/testing --debug
 or
 sudo yunohost app upgrade cachet -u https://github.com/YunoHost-Apps/cachet_ynh/tree/testing --debug
 ```
 
-**More info regarding app packaging:** https://yunohost.org/packaging_apps
+**More info regarding app packaging:** <https://yunohost.org/packaging_apps>
