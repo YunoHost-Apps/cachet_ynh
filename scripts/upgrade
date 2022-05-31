@@ -71,7 +71,7 @@ fi
 ynh_script_progression --message="Making sure dedicated system user exists..." --weight=1
 
 # Create a dedicated user (if not existing)
-ynh_system_user_create --username=$app
+ynh_system_user_create --username=$app --home_dir="$final_path"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -80,21 +80,9 @@ ynh_system_user_create --username=$app
 if [ "$upgrade_type" == "UPGRADE_APP" ]
 then
 	ynh_script_progression --message="Upgrading source files..." --weight=1
-	# Backup essential configuration files
-	tmpdir=$(mktemp -d)
-	mv $final_path/.env $tmpdir
-	mv $final_path/bootstrap/cachet/production.php $tmpdir
-	
-	# Remove every old application files
-	ynh_secure_remove --file="$final_path" # /bootstrap/cache/*
 
 	# Download, check integrity, uncompress and patch the source from app.src
-	ynh_setup_source --dest_dir="$final_path"
-
-	# Restore configuration files
-	mv $tmpdir/.env $final_path
-	mv $tmpdir/production.php $final_path/bootstrap/cachet/
-	ynh_secure_remove --file="$tmpdir"
+	ynh_setup_source --dest_dir="$final_path" --keep=".env bootstrap/cachet/production.php"
 fi
 
 chmod 750 "$final_path"
@@ -111,12 +99,19 @@ ynh_script_progression --message="Upgrading NGINX web server configuration..." -
 ynh_add_nginx_config
 
 #=================================================
+# UPGRADE DEPENDENCIES
+#=================================================
+ynh_script_progression --message="Upgrading dependencies..."
+
+ynh_install_app_dependencies $pkg_dependencies
+
+#=================================================
 # PHP-FPM CONFIGURATION
 #=================================================
 ynh_script_progression --message="Upgrading PHP-FPM configuration..." --weight=1
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config --package="$extra_php_dependencies"
+ynh_add_fpm_config
 
 #=================================================
 # SPECIFIC UPGRADE
