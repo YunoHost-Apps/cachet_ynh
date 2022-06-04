@@ -13,8 +13,6 @@
 		setup_private=1
 		setup_public=1
 		upgrade=1
-		# 2.3.15~ynh1
-		upgrade=1	from_commit=7497ea8b6915b725358db0d4a1210f999961cfee
 		# 2.4.0~ynh3
 		upgrade=1	from_commit=1a0fd240d86ffaf5bcee61c176a22a7d075688a6
 		# 2.4.0~ynh4
@@ -26,7 +24,3 @@
 ;;; Options
 Email=
 Notification=none
-;;; Upgrade options
-	; commit=7497ea8b6915b725358db0d4a1210f999961cfee
-		name=Update dependencies for buster
-		manifest_arg=domain=DOMAIN&path=PATH&admin=USER&admin_password=secret&language=en&is_public=1&
