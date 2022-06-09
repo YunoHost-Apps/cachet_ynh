@@ -101,14 +101,22 @@ fi
 #=================================================
 # SPECIFIC MODIFICATIONS
 #=================================================
+# UPDATE A CONFIG FILE
+#=================================================
+ynh_script_progression --message="Updating a configuration file..." --weight=1
 
-ynh_script_progression --message="Updating Cachet configuration..." --weight=1
+ynh_backup_if_checksum_is_different --file="$final_path/.env"
+ynh_backup_if_checksum_is_different --file="$final_path/bootstrap/cachet/production.php"
+
 # Replace domain in Cachet configuration files
 ynh_replace_string --match_string="$old_domain" --replace_string="$new_domain" --target_file="$final_path/.env"
 ynh_replace_string --match_string="$old_domain" --replace_string="$new_domain" --target_file="$final_path/bootstrap/cachet/production.php"
 
+ynh_store_file_checksum --file="$final_path/.env"
+ynh_store_file_checksum --file="$final_path/bootstrap/cachet/production.php"
+
 # Replace domain in Cachet database settings
-ynh_mysql_connect_as --user="$db_name" --password="$db_pwd" --database="$db_user"  <<< "UPDATE settings SET value = 'https://$new_domain' WHERE name = 'app_domain'"
+ynh_mysql_connect_as --user="$db_user" --password="$db_pwd" --database="$db_name"  <<< "UPDATE settings SET value = 'https://$new_domain' WHERE name = 'app_domain'"
 
 #=================================================
 # GENERIC FINALISATION

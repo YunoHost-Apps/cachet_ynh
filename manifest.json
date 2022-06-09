@@ -6,7 +6,7 @@
         "en": "Open source status page system",
         "fr": "Système de page de statut open source"
     },
-    "version": "2.4.0~ynh4",
+    "version": "2.4.0~ynh5",
     "url": "https://cachethq.io",
     "upstream": {
         "license": "BSD-3-Clause",
@@ -30,7 +30,7 @@
         "mysql"
     ],
     "arguments": {
-        "install" : [
+        "install": [
             {
                 "name": "domain",
                 "type": "domain"
@@ -49,7 +49,7 @@
                 },
                 "choices": ["fr", "en"],
                 "default": "en"
-             },
+            },
             {
                 "name": "admin",
                 "type": "user"

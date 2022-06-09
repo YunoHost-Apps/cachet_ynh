@@ -1,6 +1,7 @@
-SOURCE_URL=https://github.com/CachetHQ/Cachet/archive/c7ad51e87645e5a717fb817616424276a8e5345b.tar.gz
-SOURCE_SUM=7897744356bf81a2bcbc734f132eb5daafa889611c9c72fb2501afb3e9007cac
+SOURCE_URL=https://github.com/CachetHQ/Cachet/archive/cf86f65f1dabf283d001d0f5d380f26dd5cfb64c.tar.gz
+SOURCE_SUM=be48fdeacc093c9e688ecd9cef61e0304a856fcd6281066552bfecd8355fa35e
 SOURCE_SUM_PRG=sha256sum
 SOURCE_FORMAT=tar.gz
 SOURCE_IN_SUBDIR=true
 SOURCE_FILENAME=
+SOURCE_EXTRACT=true
