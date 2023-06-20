@@ -5,15 +5,16 @@ It shall NOT be edited by hand.
 
 # Cachet pour YunoHost
 
-[![Niveau d'intégration](https://dash.yunohost.org/integration/cachet.svg)](https://dash.yunohost.org/appci/app/cachet) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/cachet.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/cachet.maintain.svg)  
+[![Niveau d’intégration](https://dash.yunohost.org/integration/cachet.svg)](https://dash.yunohost.org/appci/app/cachet) ![Statut du fonctionnement](https://ci-apps.yunohost.org/ci/badges/cachet.status.svg) ![Statut de maintenance](https://ci-apps.yunohost.org/ci/badges/cachet.maintain.svg)
+
 [![Installer Cachet avec YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=cachet)
 
 *[Read this readme in english.](./README.md)*
 
-> *Ce package vous permet d'installer Cachet rapidement et simplement sur un serveur YunoHost.
-Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l'installer et en profiter.*
+> *Ce package vous permet d’installer Cachet rapidement et simplement sur un serveur YunoHost.
+Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour savoir comment l’installer et en profiter.*
 
-## Vue d'ensemble
+## Vue d’ensemble
 
 [Cachet](https://cachethq.io/) is a free, open source status page for your API, service or company. Built with all of the features that you'd expect from a status page, Cachet comes with a powerful API, a metric system, multiple user support, two factor authentication for added security and is easy to get setup. A powerful, self-hosted alternative to StatusPage.io and Status.io.
 
@@ -22,9 +23,9 @@ Si vous n'avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) pour
 
 **Démo :** https://demo.cachethq.io
 
-## Captures d'écran
+## Captures d’écran
 
-![Capture d'écran de Cachet](./doc/screenshots/main-interface.png)
+![Capture d’écran de Cachet](./doc/screenshots/main-interface.png)
 
 ## Avertissements / informations importantes
 
@@ -39,9 +40,9 @@ Totally configurable through the Cachet application dashboard.
 
 ## Documentations et ressources
 
-* Site officiel de l'app : <https://cachethq.io>
-* Documentation officielle de l'admin : <https://docs.cachethq.io>
-* Dépôt de code officiel de l'app : <https://github.com/CachetHQ/Cachet>
+* Site officiel de l’app : <https://cachethq.io>
+* Documentation officielle de l’admin : <https://docs.cachethq.io>
+* Dépôt de code officiel de l’app : <https://github.com/CachetHQ/Cachet>
 * Documentation YunoHost pour cette app : <https://yunohost.org/app_cachet>
 * Signaler un bug : <https://github.com/YunoHost-Apps/cachet_ynh/issues>
 
@@ -57,4 +58,4 @@ ou
 sudo yunohost app upgrade cachet -u https://github.com/YunoHost-Apps/cachet_ynh/tree/testing --debug
 ```
 
-**Plus d'infos sur le packaging d'applications :** <https://yunohost.org/packaging_apps>
+**Plus d’infos sur le packaging d’applications :** <https://yunohost.org/packaging_apps>
