@@ -16,7 +16,7 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 
 ## Vue d’ensemble
 
-[Cachet](https://cachethq.io/) is a free, open source status page for your API, service or company. Built with all of the features that you'd expect from a status page, Cachet comes with a powerful API, a metric system, multiple user support, two factor authentication for added security and is easy to get setup. A powerful, self-hosted alternative to StatusPage.io and Status.io.
+Cachet is a status page for your API, service or company. Built with all of the features that you'd expect from a status page, Cachet comes with a powerful API, a metric system, multiple user support, two factor authentication for added security and is easy to get setup. A powerful, self-hosted alternative to StatusPage.io and Status.io.
 
 
 **Version incluse :** 2.4.0~ynh5
@@ -26,17 +26,6 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 ## Captures d’écran
 
 ![Capture d’écran de Cachet](./doc/screenshots/main-interface.png)
-
-## Avertissements / informations importantes
-
-## Configuration
-
-Totally configurable through the Cachet application dashboard.
-
-## Limitations
-
-- Must necessarily be installed on domain root (see upstream issue [here](https://github.com/CachetHQ/Cachet/issues/1696))
-- Can't integrate with YunoHost SSO as LDAP support is not implemented yet (see upstream issue [here](https://github.com/CachetHQ/Cachet/issues/2108))
 
 ## Documentations et ressources
 
