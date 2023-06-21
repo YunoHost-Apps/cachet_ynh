@@ -11,7 +11,7 @@
 # Execute a command with occ
 exec_artisan() {
   (cd "$install_dir" && 
-      php$YNH_PHP_VERSION artisan $@ --quiet --no-interaction)
+      php$phpversion artisan $@ --quiet --no-interaction)
 }
 
 #=================================================
