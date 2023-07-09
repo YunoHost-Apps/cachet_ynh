@@ -53,6 +53,8 @@ ram.runtime = "50M"
         [resources.sources.main]
         url = "https://github.com/CachetHQ/Cachet/archive/cf86f65f1dabf283d001d0f5d380f26dd5cfb64c.tar.gz"
         sha256 = "be48fdeacc093c9e688ecd9cef61e0304a856fcd6281066552bfecd8355fa35e"
+        autoupdate.upstream = "https://github.com/CachetHQ/Cachet"
+        autoupdate.strategy = "latest_github_commit"
 
     [resources.system_user]
 
