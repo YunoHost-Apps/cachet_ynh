@@ -29,7 +29,6 @@ ram.runtime = "50M"
 [install]
     [install.domain]
     type = "domain"
-    full_domain = true
 
     [install.init_main_permission]
     type = "group"
@@ -38,7 +37,7 @@ ram.runtime = "50M"
     [install.language]
     ask.en = "Choose the application language"
     ask.fr = "Choisissez la langue de l'application"
-    type = "string"
+    type = "select"
     choices = ["fr", "en"]
     default = "en"
 
@@ -52,7 +51,7 @@ ram.runtime = "50M"
 [resources]
         [resources.sources.main]
         url = "https://github.com/CachetHQ/Cachet/archive/c79a66a08dbcdd89fbb5cf9bd332eb0db19629f6.tar.gz"
-        sha256 = "4474682f7e973fab428c5ec155d05fcc6f4e0f726668365bf4d9302185ac97ee"
+        sha256 = "a63554a9170e8c73f91a73288bc419705a8651982ad34af4a96208a6c861c729"
         autoupdate.strategy = "latest_github_commit"
 
     [resources.system_user]
