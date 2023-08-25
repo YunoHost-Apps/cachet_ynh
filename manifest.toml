@@ -5,7 +5,7 @@ name = "Cachet"
 description.en = "Open source status page system"
 description.fr = "Système de page de statut open source"
 
-version = "2023.08.17~ynh1"
+version = "2023.08.24~ynh1"
 
 maintainers = ["JimboJoe"]
 
@@ -17,7 +17,7 @@ admindoc = "https://docs.cachethq.io"
 code = "https://github.com/CachetHQ/Cachet"
 
 [integration]
-yunohost = ">= 11.1.21"
+yunohost = ">= 11.2"
 architectures = "all"
 multi_instance = true
 ldap = false
@@ -50,8 +50,8 @@ ram.runtime = "50M"
 
 [resources]
         [resources.sources.main]
-        url = "https://github.com/CachetHQ/Cachet/archive/3d52771a1e66ebdf818d65c21f7221315c25da23.tar.gz"
-        sha256 = "dfe20b569d5be720cf67898ea029e21e813a0e0d9b38879d202936724ea8b30c"
+        url = "https://github.com/CachetHQ/Cachet/archive/f40da226670a92934170c1adcfff3d1c40a6096b.tar.gz"
+        sha256 = "65bc27e040d963fdeea20f48bbe086f05598fdb9b8934916b6bf47a28a3d2dd8"
         autoupdate.strategy = "latest_github_commit"
 
     [resources.system_user]
