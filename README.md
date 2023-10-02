@@ -32,7 +32,6 @@ Cachet is a status page for your API, service or company. Built with all of the 
 * Official app website: <https://cachethq.io>
 * Official admin documentation: <https://docs.cachethq.io>
 * Upstream app code repository: <https://github.com/CachetHQ/Cachet>
-* YunoHost documentation for this app: <https://yunohost.org/app_cachet>
 * Report a bug: <https://github.com/YunoHost-Apps/cachet_ynh/issues>
 
 ## Developer info
