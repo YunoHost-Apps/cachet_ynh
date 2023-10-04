@@ -67,7 +67,7 @@ exec_artisan "cachet:install"
 #=================================================
 ynh_script_progression --message="Finalizing Cachet configuration..."
 
-password_hash="$(cd $install_dir ; php$YNH_PHP_VERSION artisan tinker -q  --no-ansi   <<< "echo Hash::make('$password');" |head -n 1)"
+password_hash="$(cd $install_dir ; php$phpversion artisan tinker -q  --no-ansi   <<< "echo Hash::make('$password');" |head -n 1)"
 password_pash="${password_hash::-1}" # Remove last character
 
 # Populate MySQL database
