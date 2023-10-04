@@ -16,8 +16,7 @@ Si vous n’avez pas YunoHost, regardez [ici](https://yunohost.org/#/install) po
 
 ## Vue d’ensemble
 
-Cachet is a status page for your API, service or company. Built with all of the features that you'd expect from a status page, Cachet comes with a powerful API, a metric system, multiple user support, two factor authentication for added security and is easy to get setup. A powerful, self-hosted alternative to StatusPage.io and Status.io.
-
+Cachet est une page de statut pour votre API, service ou entreprise. Construit avec toutes les fonctionnalités que vous attendez d'une page de status, Cachet est livré avec une API puissante, un système métrique, une prise en charge de plusieurs utilisateurs, une authentification à deux facteurs pour une sécurité accrue et est facile à configurer. Une alternative puissante et auto-hébergée à StatusPage.io et Status.io.
 
 **Version incluse :** 2023.09.05~ynh1
 
