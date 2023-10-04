@@ -1,3 +1,5 @@
+#:schema https://raw.githubusercontent.com/YunoHost/apps/master/schemas/manifest.v2.schema.json
+
 packaging_format = 2
 
 id = "cachet"
@@ -49,10 +51,10 @@ ram.runtime = "50M"
     optional = true
 
 [resources]
-        [resources.sources.main]
-        url = "https://github.com/CachetHQ/Cachet/archive/2323e9c0e36100f561ba03f029d87e2543636e81.tar.gz"
-        sha256 = "a3e26b429e3121e728447fd26d060321b695c56aeac3fc13eb0a79d4d80c217e"
-        autoupdate.strategy = "latest_github_commit"
+    [resources.sources.main]
+    url = "https://github.com/CachetHQ/Cachet/archive/2323e9c0e36100f561ba03f029d87e2543636e81.tar.gz"
+    sha256 = "a3e26b429e3121e728447fd26d060321b695c56aeac3fc13eb0a79d4d80c217e"
+    autoupdate.strategy = "latest_github_commit"
 
     [resources.system_user]
 
@@ -62,7 +64,15 @@ ram.runtime = "50M"
     main.url = "/"
 
     [resources.apt]
-    packages = "mariadb-server php7.4-gd php7.4-mbstring php7.4-xml php7.4-mysql php7.4-sqlite3"
+    packages = [
+        "mariadb-server",
+        "php7.4",
+        "php7.4-gd",
+        "php7.4-mbstring",
+        "php7.4-xml",
+        "php7.4-mysql",
+        "php7.4-sqlite3"
+    ]
 
     [resources.database]
     type = "mysql"
