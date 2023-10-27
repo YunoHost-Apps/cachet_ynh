@@ -7,7 +7,7 @@ name = "Cachet"
 description.en = "Open source status page system"
 description.fr = "Système de page de statut open source"
 
-version = "2023.09.05~ynh1"
+version = "2023.10.27~ynh1"
 
 maintainers = ["JimboJoe"]
 
@@ -52,8 +52,8 @@ ram.runtime = "50M"
 
 [resources]
     [resources.sources.main]
-    url = "https://github.com/CachetHQ/Cachet/archive/2323e9c0e36100f561ba03f029d87e2543636e81.tar.gz"
-    sha256 = "a3e26b429e3121e728447fd26d060321b695c56aeac3fc13eb0a79d4d80c217e"
+    url = "https://github.com/CachetHQ/Cachet/archive/7b07983d54cc5b83064c2bbe3848c3f231cf8799.tar.gz"
+    sha256 = "241f23ce6bf3c57f8716f4f94a4dbc4d3dfdaa746ab67430920de0eda6469f7a"
     autoupdate.strategy = "latest_github_commit"
 
     [resources.system_user]
