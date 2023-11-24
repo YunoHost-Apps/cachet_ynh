@@ -22,8 +22,11 @@ code = "https://github.com/CachetHQ/Cachet"
 yunohost = ">= 11.2"
 architectures = "all"
 multi_instance = true
+
 ldap = false
+
 sso = false
+
 disk = "50M"
 ram.build = "50M"
 ram.runtime = "50M"
@@ -66,12 +69,12 @@ ram.runtime = "50M"
     [resources.apt]
     packages = [
         "mariadb-server",
-        "php7.4",
-        "php7.4-gd",
-        "php7.4-mbstring",
-        "php7.4-xml",
-        "php7.4-mysql",
-        "php7.4-sqlite3"
+        "php8.2",
+        "php8.2-gd",
+        "php8.2-mbstring",
+        "php8.2-xml",
+        "php8.2-mysql",
+        "php8.2-sqlite3"
     ]
 
     [resources.database]
