@@ -3,7 +3,7 @@
 请勿手动编辑。
 -->
 
-# YunoHost 的 Cachet
+# YunoHost 上的 Cachet
 
 [![集成程度](https://dash.yunohost.org/integration/cachet.svg)](https://dash.yunohost.org/appci/app/cachet) ![工作状态](https://ci-apps.yunohost.org/ci/badges/cachet.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/cachet.maintain.svg)
 
@@ -19,7 +19,7 @@
 Cachet is a status page for your API, service or company. Built with all of the features that you'd expect from a status page, Cachet comes with a powerful API, a metric system, multiple user support, two factor authentication for added security and is easy to get setup. A powerful, self-hosted alternative to StatusPage.io and Status.io.
 
 
-**分发版本：** 2024.03.11~ynh1
+**分发版本：** 2024.06.13~ynh1
 
 **演示：** <https://demo.cachethq.io>
 
