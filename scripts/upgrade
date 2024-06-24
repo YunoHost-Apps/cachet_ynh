@@ -21,7 +21,7 @@ exec_artisan "down"
 #=================================================
 ynh_script_progression --message="Upgrading source files..." --weight=1
 
-ynh_setup_source --dest_dir="$install_dir" --keep=".env bootstrap/cachet/production.php"
+ynh_setup_source --dest_dir="$install_dir" --full_replace=1 --keep=".env bootstrap/cachet/production.php"
 
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
