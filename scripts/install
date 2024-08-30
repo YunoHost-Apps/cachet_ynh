@@ -1,11 +1,5 @@
 #!/bin/bash
 
-#=================================================
-# GENERIC START
-#=================================================
-# IMPORT GENERIC HELPERS
-#=================================================
-
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -18,45 +12,45 @@ admin_mail="$(ynh_user_get_info --username=$admin --key=mail)"
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Setting up source files..." --weight=5
+ynh_script_progression "Setting up source files..."
 
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir"
 
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
-
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:www-data "$install_dir"
 #=================================================
 # SYSTEM CONFIGURATION
 #=================================================
-ynh_script_progression --message="Adding system configurations related to $app..." --weight=1
+ynh_script_progression "Adding system configurations related to $app..."
 
 # Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_config_add_nginx
 
 # Create a dedicated PHP-FPM config
-ynh_add_fpm_config
+ynh_config_add_phpfpm
 
 #=================================================
 # SPECIFIC SETUP
 #=================================================
 # PRE-CONFIGURE CACHET
 #=================================================
-ynh_script_progression --message="Pre-configuring Cachet..." --weight=10
+ynh_script_progression "Pre-configuring Cachet..."
 
-ynh_add_config --template=".env.example" --destination="$install_dir/.env"
+ynh_config_add --template=".env.example" --destination="$install_dir/.env"
 
 #=================================================
 # INSTALL AND INITIALIZE COMPOSER
 #=================================================
-ynh_script_progression --message="Installing with composer..."
+ynh_script_progression "Installing with composer..."
 
-ynh_install_composer --install_args="--optimize-autoloader"
+ynh_composer_install
+ynh_composer_exec install --no-dev  --optimize-autoloader
 
 #=================================================
 # FINALIZE CACHET INSTALLATION
 #=================================================
-ynh_script_progression --message="Installing Cachet..."
+ynh_script_progression "Installing Cachet..."
 
 mkdir -p "$install_dir/storage/app/public"
 exec_artisan "key:generate"
@@ -65,18 +59,18 @@ exec_artisan "cachet:install"
 #=================================================
 # FINALIZE CACHET CONFIGURATION
 #=================================================
-ynh_script_progression --message="Finalizing Cachet configuration..."
+ynh_script_progression "Finalizing Cachet configuration..."
 
-password_hash="$(cd $install_dir ; php$phpversion artisan tinker -q  --no-ansi   <<< "echo Hash::make('$password');" |head -n 1)"
+password_hash="$(cd $install_dir ; php$php_version artisan tinker -q  --no-ansi   <<< "echo Hash::make('$password');" |head -n 1)"
 password_pash="${password_hash::-1}" # Remove last character
 
 # Populate MySQL database
-ynh_add_config --template="init-mysql.sql" --destination="$install_dir/init-mysql.sql"
-ynh_mysql_connect_as --user="$db_name" --password="$db_pwd" --database="$db_name" < "$install_dir/init-mysql.sql"
-ynh_delete_file_checksum --file="$install_dir/init-mysql.sql"
-#REMOVEME? ynh_secure_remove --file="$install_dir/init-mysql.sql"
+ynh_config_add --template="init-mysql.sql" --destination="$install_dir/init-mysql.sql"
+ynh_mysql_db_shell < "$install_dir/init-mysql.sql"
+ynh_delete_file_checksum "$install_dir/init-mysql.sql"
+#REMOVEME? ynh_safe_rm "$install_dir/init-mysql.sql"
 
-ynh_add_config --template="../conf/production.php" --destination="$install_dir/bootstrap/cachet/production.php"
+ynh_config_add --template="production.php" --destination="$install_dir/bootstrap/cachet/production.php"
 chown $app: $install_dir/bootstrap/cachet/production.php
 
 #=================================================
@@ -84,13 +78,13 @@ chown $app: $install_dir/bootstrap/cachet/production.php
 #=================================================
 
 # Set permissions to app files
-chmod 750 "$install_dir"
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod 750 "$install_dir"
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chmod -R o-rwx "$install_dir"
+#REMOVEME? Assuming the install dir is setup using ynh_setup_source, the proper chmod/chowns are now already applied and it shouldn't be necessary to tweak perms | chown -R $app:www-data "$install_dir"
 chown -R $app: "${install_dir}/.env" "${install_dir}/storage/" "${install_dir}/bootstrap/"
 
 #=================================================
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Installation of $app completed" --last
+ynh_script_progression "Installation of $app completed"
