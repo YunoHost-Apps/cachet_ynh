@@ -1,23 +1,12 @@
 #!/bin/bash
 
 #=================================================
-# COMMON VARIABLES
-#=================================================
-
-#=================================================
-# PERSONAL HELPERS
+# COMMON VARIABLES AND CUSTOM HELPERS
 #=================================================
 
 # Execute a command with occ
 exec_artisan() {
-  (cd "$install_dir" && 
-      php$phpversion artisan $@ --quiet --no-interaction)
+  (cd "$install_dir" &&
+
+      php$php_version artisan $@ --quiet --no-interaction)
 }
-
-#=================================================
-# EXPERIMENTAL HELPERS
-#=================================================
-
-#=================================================
-# FUTURE OFFICIAL HELPERS
-#=================================================
