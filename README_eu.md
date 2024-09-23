@@ -5,7 +5,7 @@ EZ editatu eskuz.
 
 # Cachet YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/cachet.svg)](https://dash.yunohost.org/appci/app/cachet) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/cachet.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/cachet.maintain.svg)
+[![Integrazio maila](https://dash.yunohost.org/integration/cachet.svg)](https://ci-apps.yunohost.org/ci/apps/cachet/) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/cachet.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/cachet.maintain.svg)
 
 [![Instalatu Cachet YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=cachet)
 
@@ -19,7 +19,7 @@ EZ editatu eskuz.
 Cachet is a status page for your API, service or company. Built with all of the features that you'd expect from a status page, Cachet comes with a powerful API, a metric system, multiple user support, two factor authentication for added security and is easy to get setup. A powerful, self-hosted alternative to StatusPage.io and Status.io.
 
 
-**Paketatutako bertsioa:** 2024.06.14~ynh1
+**Paketatutako bertsioa:** 2024.09.16~ynh1
 
 **Demoa:** <https://demo.cachethq.io>
 
