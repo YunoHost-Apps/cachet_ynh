@@ -6,7 +6,5 @@
 
 # Execute a command with occ
 exec_artisan() {
-  (cd "$install_dir" &&
-
-      php$php_version artisan $@ --quiet --no-interaction)
+  (cd "$install_dir" && php$php_version artisan $@ --quiet --no-interaction)
 }
