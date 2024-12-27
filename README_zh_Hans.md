@@ -5,7 +5,9 @@
 
 # YunoHost 上的 Cachet
 
-[![集成程度](https://dash.yunohost.org/integration/cachet.svg)](https://dash.yunohost.org/appci/app/cachet) ![工作状态](https://ci-apps.yunohost.org/ci/badges/cachet.status.svg) ![维护状态](https://ci-apps.yunohost.org/ci/badges/cachet.maintain.svg)
+[![集成程度](https://apps.yunohost.org/badge/integration/cachet)](https://ci-apps.yunohost.org/ci/apps/cachet/)
+![工作状态](https://apps.yunohost.org/badge/state/cachet)
+![维护状态](https://apps.yunohost.org/badge/maintained/cachet)
 
 [![使用 YunoHost 安装 Cachet](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=cachet)
 

@@ -5,7 +5,9 @@ NON debe editarse manualmente.
 
 # Cachet para YunoHost
 
-[![Nivel de integración](https://dash.yunohost.org/integration/cachet.svg)](https://dash.yunohost.org/appci/app/cachet) ![Estado de funcionamento](https://ci-apps.yunohost.org/ci/badges/cachet.status.svg) ![Estado de mantemento](https://ci-apps.yunohost.org/ci/badges/cachet.maintain.svg)
+[![Nivel de integración](https://apps.yunohost.org/badge/integration/cachet)](https://ci-apps.yunohost.org/ci/apps/cachet/)
+![Estado de funcionamento](https://apps.yunohost.org/badge/state/cachet)
+![Estado de mantemento](https://apps.yunohost.org/badge/maintained/cachet)
 
 [![Instalar Cachet con YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=cachet)
 

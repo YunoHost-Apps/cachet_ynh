@@ -5,7 +5,9 @@ EZ editatu eskuz.
 
 # Cachet YunoHost-erako
 
-[![Integrazio maila](https://dash.yunohost.org/integration/cachet.svg)](https://dash.yunohost.org/appci/app/cachet) ![Funtzionamendu egoera](https://ci-apps.yunohost.org/ci/badges/cachet.status.svg) ![Mantentze egoera](https://ci-apps.yunohost.org/ci/badges/cachet.maintain.svg)
+[![Integrazio maila](https://apps.yunohost.org/badge/integration/cachet)](https://ci-apps.yunohost.org/ci/apps/cachet/)
+![Funtzionamendu egoera](https://apps.yunohost.org/badge/state/cachet)
+![Mantentze egoera](https://apps.yunohost.org/badge/maintained/cachet)
 
 [![Instalatu Cachet YunoHost-ekin](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=cachet)
 
