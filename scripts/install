@@ -60,7 +60,8 @@ ynh_script_progression --message="Installing Cachet..."
 
 mkdir -p "$install_dir/storage/app/public"
 exec_artisan "key:generate"
-exec_artisan "cachet:install"
+exec_artisan "vendor:publish --tag=cachet"
+exec_artisan "migrate --no-interaction --force"
 
 #=================================================
 # FINALIZE CACHET CONFIGURATION
