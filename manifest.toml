@@ -75,6 +75,7 @@ ram.runtime = "50M"
         "php8.3-mysql",
         "php8.3-intl",
         "php8.3-zip",
+        "php8.3-sqlite3"
     ]
 
     [resources.database]
