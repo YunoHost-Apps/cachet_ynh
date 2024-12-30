@@ -72,7 +72,7 @@ password_hash="$(cd $install_dir ; php$phpversion artisan tinker -n --execute="e
 #password_pash="${password_hash::-1}" # Remove last character
 
 # Populate MySQL database
-ynh_add_config --template="in#it-mysql.sql" --destination="$install_dir/init-mysql.sql"
+ynh_add_config --template="init-mysql.sql" --destination="$install_dir/init-mysql.sql"
 ynh_mysql_connect_as --user="$db_name" --password="$db_pwd" --database="$db_name" < "$install_dir/init-mysql.sql"
 ynh_delete_file_checksum --file="$install_dir/init-mysql.sql"
 ynh_secure_remove --file="$install_dir/init-mysql.sql"
