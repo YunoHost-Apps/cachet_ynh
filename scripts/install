@@ -68,17 +68,17 @@ exec_artisan "migrate --force"
 #=================================================
 ynh_script_progression --message="Finalizing Cachet configuration..."
 
-password_hash="$(cd $install_dir ; php$phpversion artisan tinker -q  --no-ansi   <<< "echo Hash::make('$password');" |head -n 1)"
-password_pash="${password_hash::-1}" # Remove last character
+password_hash="$(cd $install_dir ; php$phpversion artisan tinker -n --execute="echo Hash::make('$password');")"
+#password_pash="${password_hash::-1}" # Remove last character
 
 # Populate MySQL database
-ynh_add_config --template="init-mysql.sql" --destination="$install_dir/init-mysql.sql"
+ynh_add_config --template="in#it-mysql.sql" --destination="$install_dir/init-mysql.sql"
 ynh_mysql_connect_as --user="$db_name" --password="$db_pwd" --database="$db_name" < "$install_dir/init-mysql.sql"
 ynh_delete_file_checksum --file="$install_dir/init-mysql.sql"
-#REMOVEME? ynh_secure_remove --file="$install_dir/init-mysql.sql"
+ynh_secure_remove --file="$install_dir/init-mysql.sql"
 
-ynh_add_config --template="../conf/production.php" --destination="$install_dir/bootstrap/cachet/production.php"
-chown $app: $install_dir/bootstrap/cachet/production.php
+# ynh_add_config --template="../conf/production.php" --destination="$install_dir/bootstrap/cachet/production.php"
+# chown $app: $install_dir/bootstrap/cachet/production.php
 
 #=================================================
 # SECURE FILES AND DIRECTORIES
@@ -88,7 +88,7 @@ chown $app: $install_dir/bootstrap/cachet/production.php
 chmod 750 "$install_dir"
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
-chown -R $app: "${install_dir}/.env" "${install_dir}/storage/" "${install_dir}/bootstrap/"
+# chown -R $app: "${install_dir}/.env" "${install_dir}/storage/" "${install_dir}/bootstrap/"
 
 #=================================================
 # END OF SCRIPT
