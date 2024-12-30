@@ -1,6 +1,6 @@
 
 REPLACE INTO `settings` (`group`, `name`, `payload`) VALUES
-('app', 'name', 'YunoHost Status Page'),
+-- ('app', 'name', 'YunoHost Status Page'),
 ('app','domain', 'https://__DOMAIN____PATH__'),
 ('app','timezone', 'Europe/Paris'),
 ('app','locale', '__LANGUAGE__'),
