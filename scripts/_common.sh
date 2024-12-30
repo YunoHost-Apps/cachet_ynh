@@ -13,7 +13,7 @@ YNH_COMPOSER_VERSION=2.8.4
 # Execute a command with occ
 exec_artisan() {
   (cd "$install_dir" && 
-      php$phpversion artisan $@ --quiet --no-interaction)
+      ynh_exec_as $app php$phpversion artisan $@ --quiet --no-interaction)
 }
 
 #=================================================
