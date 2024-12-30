@@ -58,10 +58,12 @@ ynh_install_composer --install_args="--optimize-autoloader"
 #=================================================
 ynh_script_progression --message="Installing Cachet..."
 
+ynh_composer_exec --command="update cachethq/core"
+
 mkdir -p "$install_dir/storage/app/public"
 exec_artisan "key:generate"
 exec_artisan "vendor:publish --tag=cachet"
-exec_artisan "migrate --force"
+exec_artisan "migrate:fresh --force"
 
 #=================================================
 # FINALIZE CACHET CONFIGURATION
