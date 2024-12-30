@@ -1,11 +1,11 @@
 
-INSERT INTO `settings` (`id`, `name`, `value`) VALUES
-(1, 'app_name', 'YunoHost Status Page'),
-(2, 'app_domain', 'https://__DOMAIN____PATH__'),
-(3, 'app_timezone', 'Europe/Paris'),
-(4, 'app_locale', '__LANGUAGE__'),
-(5, 'app_incident_days', '7');
+REPLACE INTO `settings` (`group`, `name`, `payload`) VALUES
+('app', 'name', 'YunoHost Status Page'),
+('app','domain', 'https://__DOMAIN____PATH__'),
+('app','timezone', 'Europe/Paris'),
+('app','locale', '__LANGUAGE__'),
+('app','incident_days', '7');
 
 
-INSERT INTO `users` (`id`, `username`, `password`, `email`, `api_key`, `active`, `level`) VALUES
-(1, '__ADMIN__', '__PASSWORD_HASH__', '__ADMIN_MAIL__', '', 1, 1);
+INSERT INTO `users` (`name`, `password`, `email`) VALUES
+('__ADMIN__', '__PASSWORD_HASH__', '__ADMIN_MAIL__');
