@@ -8,4 +8,4 @@ INSERT INTO `settings` (`id`, `name`, `value`) VALUES
 
 
 INSERT INTO `users` (`id`, `username`, `password`, `email`, `api_key`, `active`, `level`) VALUES
-(1, '__ADMIN__', '__PASSWORD_PASH__', '__ADMIN_MAIL__', '', 1, 1);
+(1, '__ADMIN__', '__PASSWORD_HASH__', '__ADMIN_MAIL__', '', 1, 1);
