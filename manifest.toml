@@ -7,7 +7,7 @@ name = "Cachet"
 description.en = "Open source status page system"
 description.fr = "Système de page de statut open source"
 
-version = "2025.01.09~ynh1"
+version = "2025.01.03~ynh1"
 
 maintainers = ["JimboJoe"]
 
