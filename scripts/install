@@ -13,7 +13,7 @@ source /usr/share/yunohost/helpers
 # RETRIEVE ARGUMENTS FROM THE MANIFEST
 #=================================================
 
-admin_mail="$(ynh_user_get_info --username=$admin --key=mail)"
+admin_email="$(ynh_user_get_info --username=$admin --key=mail)"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -22,6 +22,7 @@ ynh_script_progression --message="Setting up source files..." --weight=5
 
 # Download, check integrity, uncompress and patch the source from app.src
 ynh_setup_source --dest_dir="$install_dir"
+ynh_setup_source --dest_dir="$install_dir/src/cachethq/core/" --source_id="core"
 
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
@@ -51,33 +52,27 @@ ynh_add_config --template=".env.example" --destination="$install_dir/.env"
 #=================================================
 ynh_script_progression --message="Installing with composer..."
 
-ynh_install_composer --install_args="--optimize-autoloader"
+ynh_install_composer
+ynh_composer_exec --commands="install"
+ynh_composer_exec --commands="update cachethq/core"
 
 #=================================================
 # FINALIZE CACHET INSTALLATION
 #=================================================
 ynh_script_progression --message="Installing Cachet..."
 
-mkdir -p "$install_dir/storage/app/public"
-exec_artisan "key:generate"
-exec_artisan "cachet:install"
-
-#=================================================
-# FINALIZE CACHET CONFIGURATION
-#=================================================
-ynh_script_progression --message="Finalizing Cachet configuration..."
-
-password_hash="$(cd $install_dir ; php$phpversion artisan tinker -q  --no-ansi   <<< "echo Hash::make('$password');" |head -n 1)"
-password_pash="${password_hash::-1}" # Remove last character
-
-# Populate MySQL database
-ynh_add_config --template="init-mysql.sql" --destination="$install_dir/init-mysql.sql"
-ynh_mysql_connect_as --user="$db_name" --password="$db_pwd" --database="$db_name" < "$install_dir/init-mysql.sql"
-ynh_delete_file_checksum --file="$install_dir/init-mysql.sql"
-#REMOVEME? ynh_secure_remove --file="$install_dir/init-mysql.sql"
-
-ynh_add_config --template="../conf/production.php" --destination="$install_dir/bootstrap/cachet/production.php"
-chown $app: $install_dir/bootstrap/cachet/production.php
+exec_artisan key:generate
+exec_artisan vendor:publish --tag=cachet
+exec_artisan make:session-table
+exec_artisan make:queue-table
+exec_artisan make:cache-table
+exec_artisan make:notifications-table
+exec_artisan make:queue-batches-table
+exec_artisan migrate
+ynh_replace_string --match_string="test@test.com" --replace_string=$admin_email --target_file="$install_dir/database/seeders/DatabaseSeeder.php"
+ynh_replace_string --match_string="test123" --replace_string=$password --target_file="$install_dir/database/seeders/DatabaseSeeder.php"
+exec_artisan "db:seed"
+ynh_add_config --template=".cron" --destination="/etc/cron.d/$app"
 
 #=================================================
 # SECURE FILES AND DIRECTORIES

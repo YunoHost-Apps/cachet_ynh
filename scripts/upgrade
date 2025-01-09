@@ -21,7 +21,8 @@ exec_artisan "down"
 #=================================================
 ynh_script_progression --message="Upgrading source files..." --weight=1
 
-ynh_setup_source --dest_dir="$install_dir" --full_replace=1 --keep=".env bootstrap/cachet/production.php"
+ynh_setup_source --dest_dir="$install_dir" --full_replace=1 --keep=".env"
+ynh_setup_source --dest_dir="$install_dir/src/cachethq/core/" --source_id="core"
 
 chmod -R o-rwx "$install_dir"
 chown -R $app:www-data "$install_dir"
@@ -38,21 +39,32 @@ ynh_add_nginx_config
 # Create a dedicated PHP-FPM config
 ynh_add_fpm_config
 
+ynh_add_config --template="cron" --destination="/etc/cron.d/$app"
+
 #=================================================
 # SPECIFIC UPGRADE
+#=================================================
+# PRE-CONFIGURE CACHET
+#=================================================
+ynh_script_progression --message="Pre-configuring Cachet..." --weight=10
+
+ynh_add_config --template=".env.example" --destination="$install_dir/.env"
+
 #=================================================
 # INSTALL AND INITIALIZE COMPOSER
 #=================================================
 ynh_script_progression --message="Upgrading Cachet configuration and dependencies..." --weight=20
 
-ynh_install_composer --install_args="--optimize-autoloader"
+ynh_install_composer
+ynh_composer_exec --commands="install"
+ynh_composer_exec --commands="update cachethq/core"
 
 #=================================================
 # UPDATE CACHET CONFIGURATION
 #=================================================
+ynh_script_progression --message="Updating Cachet..."
 
-exec_artisan "app:update"
-ynh_secure_remove --file=bootstrap/cache/*
+exec_artisan migrate
 
 #=================================================
 # SECURE FILES AND DIRECTORIES

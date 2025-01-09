@@ -1,0 +1,5 @@
+SHELL=/bin/sh
+
+# m h dom mon dow user	command
+* * * * * php__PHPVERSION__ __INSTALL_DIR__/artisan schedule:run >> /dev/null 2>&1
+#

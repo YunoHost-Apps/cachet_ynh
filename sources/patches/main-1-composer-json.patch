@@ -1,0 +1,20 @@
+--- a/composer.json	2025-01-09 22:08:04.261066460 +0100
++++ b/composer.json	2025-01-09 22:08:48.000000000 +0100
+@@ -8,12 +8,12 @@
+             "email": "james@alt-three.com"
+         }
+     ],
+-    "repositories": {
+-        "cachet-core": {
+-            "type": "vcs",
+-            "url": "git@github.com:cachethq/core.git"
++    "repositories": [
++        {
++            "type": "path",
++            "url": "./src/cachethq/core"
+         }
+-    },
++    ],
+     "require": {
+         "php": "^8.2",
+         "cachethq/core": "dev-main",
