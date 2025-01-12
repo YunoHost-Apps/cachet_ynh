@@ -21,7 +21,7 @@ No se debe editar a mano.
 Cachet is a status page for your API, service or company. Built with all of the features that you'd expect from a status page, Cachet comes with a powerful API, a metric system, multiple user support, two factor authentication for added security and is easy to get setup. A powerful, self-hosted alternative to StatusPage.io and Status.io.
 
 
-**Versión actual:** 2024.06.14~ynh1
+**Versión actual:** 2.4.1~ynh1
 
 **Demo:** <https://demo.cachethq.io>
 
