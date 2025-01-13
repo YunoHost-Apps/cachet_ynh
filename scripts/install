@@ -62,6 +62,8 @@ mkdir -p "$install_dir/storage/app/public"
 exec_artisan "key:generate"
 exec_artisan "cachet:install"
 
+ynh_store_file_checksum --file="$install_dir/.env"
+
 #=================================================
 # FINALIZE CACHET CONFIGURATION
 #=================================================
