@@ -5,7 +5,9 @@ It shall NOT be edited by hand.
 
 # Cachet for YunoHost
 
-[![Integration level](https://dash.yunohost.org/integration/cachet.svg)](https://dash.yunohost.org/appci/app/cachet) ![Working status](https://ci-apps.yunohost.org/ci/badges/cachet.status.svg) ![Maintenance status](https://ci-apps.yunohost.org/ci/badges/cachet.maintain.svg)
+[![Integration level](https://apps.yunohost.org/badge/integration/cachet)](https://ci-apps.yunohost.org/ci/apps/cachet/)
+![Working status](https://apps.yunohost.org/badge/state/cachet)
+![Maintenance status](https://apps.yunohost.org/badge/maintained/cachet)
 
 [![Install Cachet with YunoHost](https://install-app.yunohost.org/install-with-yunohost.svg)](https://install-app.yunohost.org/?app=cachet)
 
@@ -19,7 +21,7 @@ It shall NOT be edited by hand.
 Cachet is a status page for your API, service or company. Built with all of the features that you'd expect from a status page, Cachet comes with a powerful API, a metric system, multiple user support, two factor authentication for added security and is easy to get setup. A powerful, self-hosted alternative to StatusPage.io and Status.io.
 
 
-**Shipped version:** 2024.06.14~ynh1
+**Shipped version:** 2.4.1~ynh1
 
 **Demo:** <https://demo.cachethq.io>
 
