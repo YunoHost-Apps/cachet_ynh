@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source _common.sh
 source /usr/share/yunohost/helpers
 
@@ -14,9 +18,10 @@ exec_artisan "down"
 #=================================================
 ynh_script_progression "Upgrading source files..."
 
+# Download, check integrity, uncompress and patch the source from manifest.toml
 ynh_setup_source --dest_dir="$install_dir" --full_replace --keep=".env bootstrap/cachet/production.php"
 
-chown -R $app: "${install_dir}/.env" "${install_dir}/storage/" "${install_dir}/bootstrap/"
+chown -R "$app:www-data" "${install_dir}/.env" "${install_dir}/storage/" "${install_dir}/bootstrap/"
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS

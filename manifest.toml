@@ -25,6 +25,7 @@ architectures = "all"
 multi_instance = true
 
 ldap = false
+
 sso = false
 
 disk = "50M"
@@ -57,7 +58,7 @@ ram.runtime = "50M"
     [resources.sources.main]
     url = "https://github.com/cachethq/cachet/archive/refs/tags/v2.4.1.tar.gz"
     sha256 = "9dbe47e83de1baedf5e960611211056541ed85bbad869184ca8c1cf5ad5c6244"
-    autoupdate.strategy = "latest_github_tag"
+    autoupdate.strategy = "latest_github_commit"
 
     [resources.system_user]
 
@@ -70,12 +71,12 @@ ram.runtime = "50M"
     [resources.apt]
     packages = [
         "mariadb-server",
-        "php8.3",
-        "php8.3-gd",
-        "php8.3-mbstring",
-        "php8.3-xml",
-        "php8.3-mysql",
-        "php8.3-sqlite3"
+        "php7.4",
+        "php7.4-gd",
+        "php7.4-mbstring",
+        "php7.4-xml",
+        "php7.4-mysql",
+        "php7.4-sqlite3"
     ]
 
     [resources.database]

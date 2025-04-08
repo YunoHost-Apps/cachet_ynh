@@ -1,10 +1,14 @@
 #!/bin/bash
 
+#=================================================
+# IMPORT GENERIC HELPERS
+#=================================================
+
 source _common.sh
 source /usr/share/yunohost/helpers
 
 #=================================================
-# RETRIEVE ARGUMENTS FROM THE MANIFEST
+# INITIALIZE AND STORE SETTINGS
 #=================================================
 
 admin_mail="$(ynh_user_get_info --username=$admin --key=mail)"
@@ -14,6 +18,7 @@ admin_mail="$(ynh_user_get_info --username=$admin --key=mail)"
 #=================================================
 ynh_script_progression "Setting up source files..."
 
+# Download, check integrity, uncompress and patch the source from manifest.toml
 ynh_setup_source --dest_dir="$install_dir"
 
 #=================================================
