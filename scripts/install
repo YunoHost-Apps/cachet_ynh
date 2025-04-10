@@ -68,7 +68,7 @@ password_pash="${password_hash::-1}" # Remove last character
 ynh_config_add --template="init-mysql.sql" --destination="$install_dir/init-mysql.sql"
 ynh_mysql_db_shell < "$install_dir/init-mysql.sql"
 ynh_delete_file_checksum "$install_dir/init-mysql.sql"
-#REMOVEME? ynh_safe_rm "$install_dir/init-mysql.sql"
+ynh_safe_rm "$install_dir/init-mysql.sql"
 
 ynh_config_add --template="production.php" --destination="$install_dir/bootstrap/cachet/production.php"
 chown $app: $install_dir/bootstrap/cachet/production.php
