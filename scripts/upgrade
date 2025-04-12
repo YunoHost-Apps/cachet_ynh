@@ -1,8 +1,6 @@
 #!/bin/bash
 
 #=================================================
-# GENERIC START
-#=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
 
@@ -13,56 +11,41 @@ source /usr/share/yunohost/helpers
 # SET MAINTENANCE MODE ON
 #=================================================
 
-# We need to have the required version of PHP, hence PHP-FPM block is executed beforehand
 exec_artisan "down"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression --message="Upgrading source files..." --weight=1
+ynh_script_progression "Upgrading source files..."
 
-ynh_setup_source --dest_dir="$install_dir" --full_replace=1 --keep=".env bootstrap/cachet/production.php"
+# Download, check integrity, uncompress and patch the source from manifest.toml
+ynh_setup_source --dest_dir="$install_dir" --full_replace --keep=".env bootstrap/cachet/production.php"
 
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
-chown -R $app: "${install_dir}/.env" "${install_dir}/storage/" "${install_dir}/bootstrap/"
+chown -R "$app:www-data" "${install_dir}/.env" "${install_dir}/storage/" "${install_dir}/bootstrap/"
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATIONS
 #=================================================
-ynh_script_progression --message="Upgrading system configurations related to $app..." --weight=1
+ynh_script_progression "Upgrading system configurations related to $app..."
 
-# Create a dedicated NGINX config
-ynh_add_nginx_config
+ynh_config_add_nginx
 
-# Create a dedicated PHP-FPM config
-ynh_add_fpm_config
+ynh_config_add_phpfpm
 
-#=================================================
-# SPECIFIC UPGRADE
 #=================================================
 # INSTALL AND INITIALIZE COMPOSER
 #=================================================
-ynh_script_progression --message="Upgrading Cachet configuration and dependencies..." --weight=20
+ynh_script_progression "Upgrading Cachet configuration and dependencies..."
 
-ynh_install_composer --install_args="--optimize-autoloader"
+ynh_composer_install
+ynh_composer_exec install --no-dev  --optimize-autoloader
 
 #=================================================
 # UPDATE CACHET CONFIGURATION
 #=================================================
 
 exec_artisan "app:update"
-ynh_secure_remove --file=bootstrap/cache/*
-
-#=================================================
-# SECURE FILES AND DIRECTORIES
-#=================================================
-
-# Set permissions to app files
-chmod 750 "$install_dir"
-chmod -R o-rwx "$install_dir"
-chown -R $app:www-data "$install_dir"
-chown -R $app: "${install_dir}/.env" "${install_dir}/storage/" "${install_dir}/bootstrap/"
+ynh_safe_rm bootstrap/cache/*
 
 #=================================================
 # SET MAINTENANCE MODE OFF
@@ -74,4 +57,4 @@ exec_artisan "up"
 # END OF SCRIPT
 #=================================================
 
-ynh_script_progression --message="Upgrade of $app completed" --last
+ynh_script_progression "Upgrade of $app completed"
