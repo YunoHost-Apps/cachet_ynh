@@ -45,7 +45,7 @@ ynh_add_fpm_config
 #=================================================
 ynh_script_progression --message="Upgrading Cachet configuration and dependencies..." --weight=20
 
-ynh_install_composer --install_args="--optimize-autoloader"
+#REMOVEME? ynh_install_composer --install_args="--optimize-autoloader"
 
 #=================================================
 # UPDATE CACHET CONFIGURATION
