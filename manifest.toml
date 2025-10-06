@@ -4,8 +4,8 @@ packaging_format = 2
 
 id = "cachet"
 name = "Cachet"
-description.en = "Open source status page system"
-description.fr = "Système de page de statut open source"
+description.en = "Status page to inform users about the state of online services"
+description.fr = "Page de statut pour informer les utilisateur·ice·s de l'état de services en ligne"
 
 version = "2.4.1~ynh1"
 
