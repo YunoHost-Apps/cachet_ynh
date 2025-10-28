@@ -4,8 +4,8 @@ packaging_format = 2
 
 id = "cachet"
 name = "Cachet"
-description.en = "Open source status page system"
-description.fr = "Système de page de statut open source"
+description.en = "Status page to inform users about the state of online services"
+description.fr = "Page de statut pour informer les utilisateur·ice·s de l'état de services en ligne"
 
 version = "2.4.1~ynh1"
 
@@ -71,12 +71,12 @@ ram.runtime = "50M"
     [resources.apt]
     packages = [
         "mariadb-server",
-        "php7.4",
-        "php7.4-gd",
-        "php7.4-mbstring",
-        "php7.4-xml",
-        "php7.4-mysql",
-        "php7.4-sqlite3"
+        "php8.4",
+        "php8.4-gd",
+        "php8.4-mbstring",
+        "php8.4-xml",
+        "php8.4-mysql",
+        "php8.4-sqlite3"
     ]
 
     [resources.database]

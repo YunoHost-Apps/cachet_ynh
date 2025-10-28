@@ -8,7 +8,7 @@ It shall NOT be edited by hand.
   Cachet, packaged for YunoHost
 </h1>
 
-Open source status page system
+Status page to inform users about the state of online services
 
 [![🌐 Official app website](https://img.shields.io/badge/Official_app_website-darkgreen?style=for-the-badge)](https://cachethq.io)
 [![App Demo](https://img.shields.io/badge/App_Demo-blue?style=for-the-badge)](https://demo.cachethq.io)
