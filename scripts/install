@@ -50,8 +50,10 @@ ynh_composer_exec install --no-dev --optimize-autoloader
 ynh_script_progression "Installing Cachet..."
 
 mkdir -p "$install_dir/storage/app/public"
-exec_artisan "key:generate"
-exec_artisan "cachet:install"
+exec_artisan key:generate
+exec_artisan vendor:publish --tag=cachet
+exec_artisan migrate
+exec_artisan cachet:make:user
 
 ynh_store_file_checksum "$install_dir/.env"
 
