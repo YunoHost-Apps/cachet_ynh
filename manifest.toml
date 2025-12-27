@@ -19,13 +19,12 @@ admindoc = "https://docs.cachethq.io"
 code = "https://github.com/CachetHQ/Cachet"
 
 [integration]
-yunohost = ">= 12.0.9"
+yunohost = ">= 12.1.17"
 helpers_version = "2.1"
 architectures = "all"
 multi_instance = true
 
 ldap = false
-
 sso = false
 
 disk = "50M"
@@ -71,16 +70,16 @@ ram.runtime = "50M"
     [resources.apt]
     packages = [
         "mariadb-server",
-        "php7.4",
-        "php7.4-gd",
-        "php7.4-mbstring",
-        "php7.4-xml",
-        "php7.4-mysql",
-        "php7.4-sqlite3"
+        "php8.4-fpm",
+        "php8.4-gd",
+        "php8.4-mbstring",
+        "php8.4-xml",
+        "php8.4-mysql",
+        "php8.4-sqlite3"
     ]
 
     [resources.database]
     type = "mysql"
 
     [resources.composer]
-    version = "2.8.5"
+    version = "2.9.2"
