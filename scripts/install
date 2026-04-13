@@ -50,6 +50,7 @@ ynh_composer_exec install --no-dev --optimize-autoloader
 ynh_script_progression "Installing Cachet..."
 
 mkdir -p "$install_dir/storage/app/public"
+exec_artisan composer update cachethq/core
 exec_artisan key:generate
 exec_artisan vendor:publish --tag=cachet
 exec_artisan migrate
