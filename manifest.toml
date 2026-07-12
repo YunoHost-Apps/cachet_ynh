@@ -7,7 +7,7 @@ name = "Cachet"
 description.en = "Status page to inform users about the state of online services"
 description.fr = "Page de statut pour informer les utilisateur·ice·s de l'état de services en ligne"
 
-version = "3.0.0~ynh1"
+version = "2026.07.08~ynh1"
 
 maintainers = ["JimboJoe"]
 
@@ -55,8 +55,8 @@ ram.runtime = "50M"
 
 [resources]
     [resources.sources.main]
-    url = "https://github.com/cachethq/cachet/archive/207a6d5a7c309fcdc4656a074869f0afa06d142c.tar.gz"
-    sha256 = "312de82016172349315272a6fcc3a5a248cde49e7ef721bb1805ad072e86eaaf"
+    url = "https://github.com/CachetHQ/Cachet/archive/db6854451022edeb2e493462364173b1acef73bf.tar.gz"
+    sha256 = "c3bbb9bb418e53e6856faca34b7f6809936ef1431d73ce8b88a8c38ca523ed1c"
     autoupdate.strategy = "latest_github_commit"
 
     [resources.system_user]
