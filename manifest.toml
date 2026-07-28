@@ -71,7 +71,8 @@ ram.runtime = "50M"
     [resources.apt]
     packages = [
         "redis-server",
-        "mariadb-server",
+        "postgresql",
+        "postgresql-contrib",
         "php8.4-fpm",
         "php8.4-gd",
         "php8.4-mbstring",
@@ -83,7 +84,7 @@ ram.runtime = "50M"
     ]
 
     [resources.database]
-    type = "mysql"
+    type = "postgresql"
 
     [resources.composer]
     version = "2.9.2"

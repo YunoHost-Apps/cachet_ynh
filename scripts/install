@@ -49,11 +49,12 @@ ynh_composer_exec install --no-dev --optimize-autoloader
 #=================================================
 ynh_script_progression "Installing Cachet..."
 
-mkdir -p "$install_dir/storage/app/public"
+ynh_composer_exec update cachethq/core
+
 exec_artisan key:generate
-exec_artisan vendor:publish --tag=cachet
-exec_artisan migrate
-exec_artisan cachet:make:user
+exec_artisan DB_DRIVER=postgres DB_HOST=localhost DB_DATABASE=$db_name DB_USERNAME=$db_user DB_PASSWORD=$db_pwd vendor:publish --tag=cachet
+exec_artisan DB_DRIVER=postgres DB_HOST=localhost DB_DATABASE=$db_name DB_USERNAME=$db_user DB_PASSWORD=$db_pwd migrate
+exec_artisan DB_DRIVER=postgres DB_HOST=localhost DB_DATABASE=$db_name DB_USERNAME=$db_user DB_PASSWORD=$db_pwd cachet:make:user
 
 ynh_store_file_checksum "$install_dir/.env"
 
