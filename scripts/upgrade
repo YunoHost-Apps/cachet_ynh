@@ -7,7 +7,9 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
-timezone=$(timedatectl show --value --property=Timezone)
+if ynh_app_upgrading_from_version_before 2026.07.25~ynh1; then
+	ynh_die "Upgrade from 2.* is not available for now. Or you don't update Cachet or you uninstall it and do a fresh install"
+fi
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
