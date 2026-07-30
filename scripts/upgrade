@@ -7,11 +7,13 @@
 source _common.sh
 source /usr/share/yunohost/helpers
 
+timezone=$(timedatectl show --value --property=Timezone)
+
 #=================================================
 # SET MAINTENANCE MODE ON
 #=================================================
 
-exec_artisan "down"
+_ynh_artisan "down"
 
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
@@ -24,7 +26,7 @@ ynh_setup_source --dest_dir="$install_dir" --full_replace --keep=".env bootstrap
 chown -R "$app:www-data" "${install_dir}/.env" "${install_dir}/storage/" "${install_dir}/bootstrap/"
 
 #=================================================
-# REAPPLY SYSTEM CONFIGURATIONS
+# REAPPLY SYSTEM CONFIGURATION
 #=================================================
 ynh_script_progression "Upgrading system configurations related to $app..."
 
@@ -32,25 +34,27 @@ ynh_config_add_nginx
 
 ynh_config_add_phpfpm
 
+ynh_config_add --template="cron" --destination="/etc/cron.d/$app"
+
 #=================================================
 # INSTALL AND INITIALIZE COMPOSER
 #=================================================
 ynh_script_progression "Upgrading Cachet configuration and dependencies..."
 
-ynh_composer_exec install --no-dev  --optimize-autoloader
+ynh_composer_exec install --no-dev --optimize-autoloader
 
 #=================================================
 # UPDATE CACHET CONFIGURATION
 #=================================================
 
-exec_artisan "app:update"
+_ynh_artisan "app:update"
 ynh_safe_rm bootstrap/cache/*
 
 #=================================================
 # SET MAINTENANCE MODE OFF
 #=================================================
 
-exec_artisan "up"
+_ynh_artisan "up"
 
 #=================================================
 # END OF SCRIPT
