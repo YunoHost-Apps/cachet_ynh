@@ -10,12 +10,6 @@ source /usr/share/yunohost/helpers
 timezone=$(timedatectl show --value --property=Timezone)
 
 #=================================================
-# SET MAINTENANCE MODE ON
-#=================================================
-
-_ynh_artisan "down"
-
-#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
 ynh_script_progression "Upgrading source files..."
@@ -53,12 +47,6 @@ pushd $install_dir
 	_ynh_artisan migrate --force
 	_ynh_artisan queue:work --stop-when-empty
 popd
-
-#=================================================
-# SET MAINTENANCE MODE OFF
-#=================================================
-
-_ynh_artisan "up"
 
 #=================================================
 # END OF SCRIPT
