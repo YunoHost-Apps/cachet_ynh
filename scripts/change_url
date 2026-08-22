@@ -25,7 +25,7 @@ ynh_backup_if_checksum_is_different "$install_dir/bootstrap/cachet/production.ph
 
 # Replace domain in Cachet configuration files
 ynh_replace --match="$old_domain" --replace="$new_domain" --file="$install_dir/.env"
-ynh_replace --match="$old_domain" --replace="$new_domain" --file="$install_dir/bootstrap/cachet/production.php"
+#ynh_replace --match="$old_domain" --replace="$new_domain" --file="$install_dir/bootstrap/cachet/production.php"
 
 ynh_store_file_checksum "$install_dir/.env"
 ynh_store_file_checksum "$install_dir/bootstrap/cachet/production.php"
