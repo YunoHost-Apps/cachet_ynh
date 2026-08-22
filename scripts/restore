@@ -34,6 +34,12 @@ ynh_restore "/etc/php/$php_version/fpm/pool.d/$app.conf"
 ynh_restore "/etc/nginx/conf.d/$domain.d/$app.conf"
 
 #=================================================
+# RESTORE VARIOUS FILES
+#=================================================
+
+ynh_restore "/etc/cron.d/$app"
+
+#=================================================
 # RELOAD NGINX AND PHP-FPM OR THE APP SERVICE
 #=================================================
 ynh_script_progression "Reloading NGINX web server and $app's service..."
