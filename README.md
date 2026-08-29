@@ -21,7 +21,7 @@ Status page to inform users about the state of online services
 
 
 ## Screenshots
-![Screenshot of Cachet](./doc/screenshots/main-interface.png)
+![Screenshot of Cachet](./doc/screenshots/screenshot-light.jpg)
 
 ## 📦 Developer info
 
